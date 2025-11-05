@@ -439,8 +439,8 @@ export default function VariantD({ variant }: VariantProps) {
         ))}
       </div>
 
-      {/* Hero Section - 3D Premium Animation */}
-      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden py-20 md:py-0" style={{ perspective: '2000px' }}>
+      {/* Hero Section - 3D Premium Animation with 8pt spacing */}
+      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden py-16 md:py-0" style={{ perspective: '2000px' }}>
         {/* Morphing Gradient Background - Animated */}
         <div className="hero-morph-bg absolute inset-0 z-0">
           <motion.div
@@ -736,15 +736,15 @@ export default function VariantD({ variant }: VariantProps) {
           ))}
         </div>
 
-        {/* Content container - Mobile optimized spacing */}
+        {/* Content container - 8pt spacing system */}
         <div className="container mx-auto px-4 sm:px-6 relative z-20">
           <div className="max-w-6xl mx-auto">
             <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
               {/* Left: Content */}
-              <div className="text-center lg:text-left">
-                {/* Trust Badge - Mobile optimized */}
+              <div className="text-center lg:text-left space-y-6 md:space-y-8">
+                {/* Trust Badge - 8pt spacing */}
                 <motion.div
-                  className="hero-badge inline-flex items-center gap-2 bg-white/10 backdrop-blur-xl px-4 py-2 md:px-6 md:py-3 rounded-full shadow-2xl mb-6 md:mb-8 border border-white/20 text-xs md:text-sm"
+                  className="hero-badge inline-flex items-center gap-2 bg-white/10 backdrop-blur-xl px-4 py-2 md:px-6 md:py-3 rounded-full shadow-2xl border border-white/20 text-xs md:text-sm"
                   whileHover={{ scale: 1.05, backgroundColor: 'rgba(255, 255, 255, 0.15)' }}
                   style={{
                     boxShadow: '0 8px 32px rgba(251, 191, 36, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
@@ -756,9 +756,9 @@ export default function VariantD({ variant }: VariantProps) {
                   </span>
                 </motion.div>
 
-                {/* Hero Title - Mobile optimized typography */}
-                <div className="mb-4 md:mb-6" style={{ perspective: '1000px' }}>
-                  <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight">
+                {/* Hero Title - 8pt spacing with proper line-height */}
+                <div style={{ perspective: '1000px' }}>
+                  <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-snug md:leading-tight">
                     <div className="hero-title-word inline-block mr-3" style={{
                       color: '#ffffff',
                       textShadow: '0 4px 20px rgba(0,0,0,0.5), 0 8px 40px rgba(0,0,0,0.3), 0 0 60px rgba(251, 191, 36, 0.3)',
@@ -831,9 +831,9 @@ export default function VariantD({ variant }: VariantProps) {
                   </h1>
                 </div>
 
-                {/* Hero Subtitle - Mobile optimized */}
+                {/* Hero Subtitle - 8pt spacing with proper line-height */}
                 <p
-                  className="hero-subtitle text-base sm:text-lg md:text-xl mb-6 md:mb-10 leading-relaxed font-medium px-2 sm:px-0"
+                  className="hero-subtitle text-base sm:text-lg md:text-xl leading-relaxed md:leading-loose font-medium px-0"
                   style={{
                     color: '#fef3c7',
                     textShadow: '0 2px 8px rgba(0,0,0,0.6), 0 1px 4px rgba(0,0,0,0.5)',
@@ -853,11 +853,13 @@ export default function VariantD({ variant }: VariantProps) {
                   và tiện ích gia dụng hiện đại, biến không gian sống thành nơi an lạc và đầy cảm hứng
                 </p>
 
-                {/* Hero CTA with Magnetic Button */}
-                <MagneticCTA onSubmit={handleSubmit} email={email} setEmail={setEmail} />
+                {/* Hero CTA with Magnetic Button - 8pt spacing */}
+                <div>
+                  <MagneticCTA onSubmit={handleSubmit} email={email} setEmail={setEmail} />
+                </div>
 
-                {/* Social Proof Stats */}
-                <div className="mt-8 md:mt-12">
+                {/* Social Proof Stats - 8pt spacing */}
+                <div>
                   <AnimatedStats />
                 </div>
               </div>
@@ -876,8 +878,8 @@ export default function VariantD({ variant }: VariantProps) {
                   ))}
                 </div>
               ) : (
-                /* Mobile: Simple Feature Grid instead of floating cards */
-                <div className="grid grid-cols-2 gap-3 sm:gap-4 mt-8">
+                /* Mobile: Simple Feature Grid - 8pt spacing */
+                <div className="grid grid-cols-2 gap-4 mt-8">
                   {FLOATING_FEATURES.map((feature, index) => (
                     <motion.div
                       key={index}
@@ -885,11 +887,11 @@ export default function VariantD({ variant }: VariantProps) {
                       whileInView={{ opacity: 1, scale: 1 }}
                       viewport={{ once: true }}
                       transition={{ delay: index * 0.1 }}
-                      className={`bg-gradient-to-br ${feature.color} rounded-2xl p-4 sm:p-5 text-white text-center shadow-lg`}
+                      className={`bg-gradient-to-br ${feature.color} rounded-2xl p-4 sm:p-6 text-white text-center shadow-lg`}
                     >
-                      <div className="text-3xl sm:text-4xl mb-2">{feature.icon}</div>
-                      <h3 className="text-sm sm:text-base font-bold mb-1">{feature.title}</h3>
-                      <p className="text-xs sm:text-sm opacity-90">{feature.desc}</p>
+                      <div className="text-3xl sm:text-4xl mb-3">{feature.icon}</div>
+                      <h3 className="text-sm sm:text-base font-bold mb-2 leading-snug">{feature.title}</h3>
+                      <p className="text-xs sm:text-sm opacity-90 leading-relaxed">{feature.desc}</p>
                     </motion.div>
                   ))}
                 </div>
@@ -956,11 +958,11 @@ function MagneticCTA({ onSubmit, email, setEmail }: any) {
   return (
     <motion.form
       onSubmit={onSubmit}
-      className="hero-cta max-w-2xl mx-auto mb-8 md:mb-12 px-2 sm:px-0"
+      className="hero-cta max-w-2xl mx-auto"
       whileHover={{ scale: 1.02 }}
       transition={{ type: 'spring', stiffness: 300 }}
     >
-      <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 bg-white/95 backdrop-blur-md p-2 rounded-xl sm:rounded-2xl shadow-2xl border border-primary-100/50">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 bg-white/95 backdrop-blur-md p-2 rounded-xl sm:rounded-2xl shadow-2xl border border-primary-100/50">
         <Input
           type="email"
           value={email}
@@ -994,7 +996,7 @@ function MagneticCTA({ onSubmit, email, setEmail }: any) {
             type="submit"
             variant="primary"
             size="lg"
-            className="w-full sm:w-auto px-6 sm:px-8 whitespace-nowrap shadow-lg hover:shadow-2xl transition-all relative overflow-hidden group text-sm sm:text-base"
+            className="w-full sm:w-auto px-6 sm:px-8 whitespace-nowrap shadow-lg hover:shadow-2xl transition-all relative overflow-hidden group text-sm sm:text-base leading-normal"
           >
             <span className="relative z-10">Khám Phá Ngay →</span>
             <motion.div
@@ -1006,7 +1008,7 @@ function MagneticCTA({ onSubmit, email, setEmail }: any) {
           </Button>
         </motion.div>
       </div>
-      <p className="text-xs sm:text-sm mt-2 sm:mt-3 font-medium text-center" style={{ color: '#e5e7eb', textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>
+      <p className="text-xs sm:text-sm mt-4 font-medium text-center leading-relaxed" style={{ color: '#e5e7eb', textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>
         🎁 Giảm 20% đơn đầu • 🚚 Freeship • ⭐ Hỗ trợ 24/7
       </p>
     </motion.form>
@@ -1026,7 +1028,7 @@ const AnimatedStats = memo(function AnimatedStats() {
   ];
 
   return (
-    <div ref={ref} className="grid grid-cols-3 gap-3 sm:gap-4 md:gap-6 max-w-3xl mx-auto">
+    <div ref={ref} className="grid grid-cols-3 gap-4 md:gap-6 max-w-3xl mx-auto">
       {stats.map((stat, index) => (
         <motion.div
           key={index}
@@ -1035,10 +1037,10 @@ const AnimatedStats = memo(function AnimatedStats() {
           transition={{ delay: index * 0.2, type: 'spring', stiffness: 100 }}
           className="text-center"
         >
-          <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-amber-600">
+          <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-amber-600 leading-tight">
             <CountUp end={stat.value} suffix={stat.suffix} />
           </div>
-          <div className="text-xs sm:text-sm text-slate-700 mt-1">{stat.label}</div>
+          <div className="text-xs sm:text-sm text-slate-700 mt-2 leading-snug">{stat.label}</div>
         </motion.div>
       ))}
     </div>
@@ -1182,7 +1184,7 @@ function FeaturesSection() {
   ];
 
   return (
-    <section ref={sectionRef} className="py-20 px-4 relative overflow-hidden">
+    <section ref={sectionRef} className="py-12 md:py-20 px-4 relative overflow-hidden">
       {/* Background Image Layers with Parallax */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute left-0 top-0 w-1/2 h-3/4 opacity-10 feature-bg-1">
@@ -1206,16 +1208,16 @@ function FeaturesSection() {
       </div>
 
       <div className="container mx-auto max-w-7xl relative">
-        <div className="text-center mb-16">
-          <h2 className="features-title text-5xl font-bold text-gray-900 mb-4">
+        <div className="text-center mb-12 md:mb-16 space-y-4">
+          <h2 className="features-title text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
             Giải Pháp Toàn Diện
           </h2>
-          <p className="features-subtitle text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="features-subtitle text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed px-4 sm:px-0">
             Từ phòng khách đến phòng ngủ, từ nhà bếp đến phòng tắm - Ecomate đồng hành cùng mọi không gian sống
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {features.map((feature, index) => (
             <FeatureCard key={index} feature={feature} index={index} />
           ))}
@@ -1293,16 +1295,16 @@ const FeatureCard = memo(function FeatureCard({ feature, index }: { feature: any
 
       <div className="relative z-10" style={{ transform: 'translateZ(50px)' }}>
         <motion.div
-          className="text-5xl mb-4"
+          className="text-4xl sm:text-5xl mb-4"
           whileHover={{ scale: 1.2, rotate: 10 }}
           transition={{ type: 'spring', stiffness: 300 }}
         >
           {feature.icon}
         </motion.div>
-        <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">
+        <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors leading-snug">
           {feature.title}
         </h3>
-        <p className="text-gray-600 leading-relaxed">
+        <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
           {feature.description}
         </p>
       </div>
@@ -1393,7 +1395,7 @@ function ImpactSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-20 px-4 relative overflow-hidden min-h-[600px] flex items-center">
+    <section ref={sectionRef} className="py-12 md:py-20 px-4 relative overflow-hidden min-h-[500px] md:min-h-[600px] flex items-center">
       {/* Background Image with Warm Home Overlays */}
       <div className="absolute inset-0 -z-10">
         <div className="impact-bg absolute inset-0">
@@ -1438,16 +1440,16 @@ function ImpactSection() {
       </div>
 
       <div className="container mx-auto max-w-6xl text-center relative z-10">
-        <div>
-          <h2 className="impact-title text-5xl font-bold mb-6 text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]">
+        <div className="space-y-8 md:space-y-12">
+          <h2 className="impact-title text-3xl sm:text-4xl md:text-5xl font-bold text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)] leading-tight">
             Hành Trình Cùng Khách Hàng
           </h2>
-          <p className="impact-description text-xl mb-12 max-w-2xl mx-auto text-amber-50 drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
+          <p className="impact-description text-base sm:text-lg md:text-xl max-w-2xl mx-auto text-amber-50 drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)] leading-relaxed px-4 sm:px-0">
             15,000+ gia đình Việt đã tin tưởng và lựa chọn Ecomate,
             biến ngôi nhà thành không gian sống lý tưởng
           </p>
 
-          <div className="grid md:grid-cols-4 gap-8 mt-16">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
             {[
               { icon: '🏠', number: '15K+', label: 'Gia đình tin dùng' },
               { icon: '📦', number: '50K+', label: 'Sản phẩm bán ra' },
@@ -1456,11 +1458,11 @@ function ImpactSection() {
             ].map((item, index) => (
               <div
                 key={index}
-                className="impact-stat text-center backdrop-blur-sm bg-white/10 rounded-2xl p-6 hover:bg-white/20 transition-all cursor-pointer"
+                className="impact-stat text-center backdrop-blur-sm bg-white/10 rounded-2xl p-4 md:p-6 hover:bg-white/20 transition-all cursor-pointer"
               >
-                <div className="text-6xl mb-4 drop-shadow-lg">{item.icon}</div>
-                <div className="text-4xl font-bold mb-2 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">{item.number}</div>
-                <div className="text-lg text-amber-50 drop-shadow-md">{item.label}</div>
+                <div className="text-4xl sm:text-5xl md:text-6xl mb-3 md:mb-4 drop-shadow-lg">{item.icon}</div>
+                <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)] leading-tight">{item.number}</div>
+                <div className="text-sm sm:text-base md:text-lg text-amber-50 drop-shadow-md leading-snug">{item.label}</div>
               </div>
             ))}
           </div>
@@ -1562,7 +1564,7 @@ function TestimonialsSection() {
   ];
 
   return (
-    <section ref={sectionRef} className="py-20 px-4 relative overflow-hidden">
+    <section ref={sectionRef} className="py-12 md:py-20 px-4 relative overflow-hidden">
       {/* Subtle Background Image */}
       <div className="absolute inset-0 -z-10">
         <div className="testimonial-bg absolute inset-0 opacity-5">
@@ -1577,16 +1579,16 @@ function TestimonialsSection() {
       </div>
 
       <div className="container mx-auto max-w-7xl relative">
-        <div className="text-center mb-16">
-          <h2 className="testimonials-title text-5xl font-bold text-gray-900 mb-4">
+        <div className="text-center mb-12 md:mb-16 space-y-4">
+          <h2 className="testimonials-title text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
             Khách Hàng Nói Gì
           </h2>
-          <p className="testimonials-subtitle text-xl text-gray-600">
+          <p className="testimonials-subtitle text-base sm:text-lg md:text-xl text-gray-600 leading-relaxed px-4 sm:px-0">
             Phản hồi chân thực từ những gia đình đã tin tưởng Ecomate
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8" style={{ perspective: '2000px' }}>
+        <div className="grid md:grid-cols-3 gap-4 md:gap-8" style={{ perspective: '2000px' }}>
           {testimonials.map((testimonial, index) => (
             <TestimonialCard key={index} testimonial={testimonial} index={index} />
           ))}
@@ -1610,7 +1612,7 @@ const TestimonialCard = memo(function TestimonialCard({ testimonial, index }: { 
       whileHover={{ y: -12, scale: 1.03 }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      className="testimonial-card bg-white/95 backdrop-blur-sm p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all relative overflow-hidden group"
+      className="testimonial-card bg-white/95 backdrop-blur-sm p-6 md:p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all relative overflow-hidden group"
     >
       {/* Animated gradient background on hover */}
       <motion.div
@@ -1622,28 +1624,28 @@ const TestimonialCard = memo(function TestimonialCard({ testimonial, index }: { 
 
       {/* Quote decoration */}
       <motion.div
-        className="absolute -top-4 -left-4 text-8xl text-primary-200 opacity-20 font-serif"
+        className="absolute -top-4 -left-4 text-6xl md:text-8xl text-primary-200 opacity-20 font-serif"
         animate={{ scale: isHovered ? 1.2 : 1 }}
         transition={{ duration: 0.3 }}
       >
         "
       </motion.div>
 
-      <div className="relative z-10">
-        <div className="flex items-center mb-4">
+      <div className="relative z-10 space-y-4">
+        <div className="flex items-center">
           <motion.div
-            className="text-5xl mr-4"
+            className="text-4xl md:text-5xl mr-3 md:mr-4"
             animate={{ rotate: isHovered ? [0, -10, 10, 0] : 0 }}
             transition={{ duration: 0.5 }}
           >
             {testimonial.avatar}
           </motion.div>
           <div>
-            <div className="font-bold text-lg text-gray-900">{testimonial.name}</div>
-            <div className="text-sm text-primary-600 font-medium">{testimonial.role}</div>
+            <div className="font-bold text-base md:text-lg text-gray-900 leading-snug">{testimonial.name}</div>
+            <div className="text-xs md:text-sm text-primary-600 font-medium leading-snug">{testimonial.role}</div>
           </div>
         </div>
-        <p className="text-gray-700 italic leading-relaxed mb-4">
+        <p className="text-sm md:text-base text-gray-700 italic leading-relaxed">
           "{testimonial.content}"
         </p>
         <div className="flex gap-1">
@@ -1746,7 +1748,7 @@ function FinalCTASection({ onSubmit, email, setEmail }: any) {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-24 px-4 relative overflow-hidden">
+    <section ref={sectionRef} className="py-12 md:py-24 px-4 relative overflow-hidden">
       {/* Warm, Inviting Background Image */}
       <div className="absolute inset-0 -z-10">
         <div className="cta-bg absolute inset-0">
@@ -1824,16 +1826,16 @@ function FinalCTASection({ onSubmit, email, setEmail }: any) {
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className="cta-box relative rounded-[32px] p-12 text-white text-center overflow-hidden"
+          className="cta-box relative rounded-[24px] md:rounded-[32px] p-8 md:p-12 text-white text-center overflow-hidden"
         >
           {/* Glass morphism effect */}
-          <div className="absolute inset-0 bg-white/10 backdrop-blur-xl rounded-[32px] border border-white/20" />
+          <div className="absolute inset-0 bg-white/10 backdrop-blur-xl rounded-[24px] md:rounded-[32px] border border-white/20" />
 
-          <div className="relative z-10">
-            <h2 className="cta-title text-5xl font-bold mb-6">
+          <div className="relative z-10 space-y-6 md:space-y-10">
+            <h2 className="cta-title text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">
               Sẵn Sàng Nâng Cấp Ngôi Nhà?
             </h2>
-            <p className="cta-description text-xl mb-10 opacity-90 max-w-2xl mx-auto">
+            <p className="cta-description text-base sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed px-4 sm:px-0">
               Khám phá 5,000+ sản phẩm tiện ích tại Shopee Store.
               Mua sắm dễ dàng, giao hàng nhanh chóng ngay hôm nay!
             </p>
@@ -1880,7 +1882,7 @@ function FinalMagneticCTA({ onSubmit, email, setEmail }: any) {
           placeholder="Nhập email nhận ưu đãi đặc biệt"
           required
           inputSize="lg"
-          className="flex-1 border-0 bg-white text-gray-900 focus:ring-2 focus:ring-white/50"
+          className="flex-1 border-0 bg-white text-gray-900 focus:ring-2 focus:ring-white/50 text-sm sm:text-base"
         />
         <motion.div
           ref={buttonRef}
@@ -1905,7 +1907,7 @@ function FinalMagneticCTA({ onSubmit, email, setEmail }: any) {
           <Button
             type="submit"
             size="lg"
-            className="px-8 bg-white text-primary-600 hover:bg-gray-100 shadow-lg whitespace-nowrap relative overflow-hidden group"
+            className="px-6 sm:px-8 bg-white text-primary-600 hover:bg-gray-100 shadow-lg whitespace-nowrap relative overflow-hidden group text-sm sm:text-base leading-normal w-full sm:w-auto"
           >
             <span className="relative z-10 font-bold">Mua Ngay Trên Shopee →</span>
             <motion.div
@@ -1918,7 +1920,7 @@ function FinalMagneticCTA({ onSubmit, email, setEmail }: any) {
         </motion.div>
       </div>
       <motion.p
-        className="text-sm mt-4 font-medium"
+        className="text-xs sm:text-sm mt-4 font-medium leading-relaxed"
         style={{ color: '#ffffff', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
