@@ -312,7 +312,7 @@ export default function VariantD({ variant }: VariantProps) {
             >
               <span className="w-2 h-2 bg-primary-500 rounded-full animate-pulse" />
               <span className="text-sm font-medium text-gray-800">
-                Được tin cậy bởi <strong className="text-primary-600">50,000+</strong> người dùng
+                Được tin cậy bởi <strong className="text-primary-600">15,000+</strong> gia đình Việt
               </span>
             </motion.div>
 
@@ -324,7 +324,7 @@ export default function VariantD({ variant }: VariantProps) {
                 textShadow: '0 2px 10px rgba(0,0,0,0.3), 0 4px 20px rgba(0,0,0,0.2), 0 0 40px rgba(34, 197, 94, 0.3)',
               }}
             >
-              Xây Dựng{' '}
+              Tiện Ích{' '}
               <span
                 className="relative inline-block"
                 style={{
@@ -335,13 +335,13 @@ export default function VariantD({ variant }: VariantProps) {
                   filter: 'drop-shadow(0 0 30px rgba(34, 197, 94, 0.5))',
                 }}
               >
-                Tương Lai
+                Mỗi Ngày
                 <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 200 12" fill="none">
                   <path d="M2 10C50 2 150 2 198 10" stroke="#22c55e" strokeWidth="3" strokeLinecap="round"/>
                 </svg>
               </span>
               <br />
-              Bền Vững
+              Trong Từng Căn Phòng
             </h1>
 
             {/* Hero Subtitle with better contrast */}
@@ -352,8 +352,8 @@ export default function VariantD({ variant }: VariantProps) {
                 textShadow: '0 2px 8px rgba(0,0,0,0.4), 0 1px 4px rgba(0,0,0,0.3)',
               }}
             >
-              Tham gia cộng đồng hơn <span className="text-primary-300 font-bold">50,000 người</span> đang kiến tạo một hệ sinh thái xanh,
-              giảm thiểu tác động môi trường và lan tỏa giá trị bền vững cho thế hệ tương lai
+              Khám phá <span className="text-primary-300 font-bold">giải pháp nhà thông minh</span> và tiện ích gia dụng hiện đại,
+              biến không gian sống của bạn thành nơi an lạc, tiện nghi và đầy cảm hứng
             </p>
 
             {/* Hero CTA with Magnetic Button */}
@@ -428,7 +428,7 @@ function MagneticCTA({ onSubmit, email, setEmail }: any) {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Nhập email của bạn"
+          placeholder="Nhập email nhận ưu đãi 20%"
           required
           inputSize="lg"
           className="flex-1 border-0 focus:ring-2 focus:ring-primary-400 transition-all"
@@ -459,7 +459,7 @@ function MagneticCTA({ onSubmit, email, setEmail }: any) {
             size="lg"
             className="px-8 whitespace-nowrap shadow-lg hover:shadow-2xl transition-all relative overflow-hidden group"
           >
-            <span className="relative z-10">Bắt Đầu Ngay →</span>
+            <span className="relative z-10">Khám Phá Ngay →</span>
             <motion.div
               className="absolute inset-0 bg-gradient-to-r from-primary-400 to-primary-600"
               initial={{ x: '-100%' }}
@@ -470,7 +470,7 @@ function MagneticCTA({ onSubmit, email, setEmail }: any) {
         </motion.div>
       </div>
       <p className="text-sm mt-3 font-medium" style={{ color: '#e5e7eb', textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>
-        ✨ Miễn phí mãi mãi • 🚀 Không cần thẻ tín dụng • 🔓 Hủy bất cứ lúc nào
+        🎁 Giảm 20% đơn đầu • 🚚 Freeship toàn quốc • ⭐ Hỗ trợ 24/7
       </p>
     </motion.form>
   );
@@ -482,8 +482,8 @@ function AnimatedStats() {
   const isInView = useInView(ref, { once: true });
 
   const stats = [
-    { value: 50000, suffix: '+', label: 'Người dùng' },
-    { value: 2000000, suffix: '+', label: 'Tấn CO₂ giảm' },
+    { value: 15000, suffix: '+', label: 'Gia đình' },
+    { value: 50000, suffix: '+', label: 'Sản phẩm' },
     { value: 4.9, suffix: '/5', label: 'Đánh giá' },
   ];
 
@@ -578,34 +578,34 @@ function FeaturesSection() {
 
   const features = [
     {
-      icon: '🌱',
-      title: 'Theo Dõi Dấu Chân Carbon',
-      description: 'Giám sát và phân tích lượng phát thải carbon của bạn với công nghệ AI hiện đại, nhận insights chi tiết để cải thiện.',
+      icon: '🏠',
+      title: 'Nhà Thông Minh',
+      description: 'Giải pháp IoT hiện đại giúp điều khiển ánh sáng, nhiệt độ, an ninh từ xa. Tiết kiệm điện năng và nâng cao trải nghiệm sống.',
     },
     {
-      icon: '📊',
-      title: 'Báo Cáo Chi Tiết',
-      description: 'Dashboard trực quan với biểu đồ và số liệu theo thời gian thực, giúp bạn hiểu rõ tác động của mình đến môi trường.',
+      icon: '🛋️',
+      title: 'Phòng Khách Hiện Đại',
+      description: 'Tủ trang trí thông minh, kệ TV đa năng, đèn LED điều chỉnh màu sắc. Biến phòng khách thành không gian tiếp khách ấn tượng.',
     },
     {
-      icon: '🎯',
-      title: 'Mục Tiêu Cá Nhân Hóa',
-      description: 'Đặt và theo dõi các mục tiêu bền vững phù hợp với lối sống, nhận gợi ý thông minh để đạt được chúng.',
+      icon: '🍳',
+      title: 'Bếp Tiện Nghi',
+      description: 'Thiết bị nhà bếp thông minh, giá để đồ thông minh, máy lọc nước RO. Nấu nướng dễ dàng, gian bếp gọn gàng.',
     },
     {
-      icon: '🌍',
-      title: 'Cộng Đồng Toàn Cầu',
-      description: 'Kết nối với hàng ngàn người có cùng chí hướng, chia sẻ kinh nghiệm và cùng nhau tạo ra tác động tích cực.',
+      icon: '🛏️',
+      title: 'Phòng Ngủ An Lạc',
+      description: 'Đèn ngủ cảm ứng, tủ quần áo thông minh, máy khuếch tán tinh dầu. Không gian nghỉ ngơi lý tưởng cho giấc ngủ sâu.',
     },
     {
-      icon: '🏆',
-      title: 'Thành Tựu & Phần Thưởng',
-      description: 'Nhận huy chương và phần thưởng khi đạt được các mốc quan trọng, biến hành trình xanh thành trải nghiệm thú vị.',
+      icon: '🚿',
+      title: 'Phòng Tắm Sang Trọng',
+      description: 'Vòi cảm ứng, kệ treo thông minh, gương LED hiện đại. Nâng tầm trải nghiệm thư giãn mỗi ngày.',
     },
     {
-      icon: '💚',
-      title: 'Tác Động Thực Tế',
-      description: 'Mỗi hành động của bạn đều được quy đổi thành giá trị cụ thể, từ cây xanh được trồng đến năng lượng được tiết kiệm.',
+      icon: '🎨',
+      title: 'Phong Cách Cá Nhân',
+      description: 'Kết hợp đa dạng phong cách từ tối giản, Bắc Âu, đến hiện đại Nhật Bản. Tạo dựng không gian riêng biệt.',
     },
   ];
 
@@ -642,10 +642,10 @@ function FeaturesSection() {
           className="text-center mb-16"
         >
           <h2 className="text-5xl font-bold text-gray-900 mb-4">
-            Tính Năng Nổi Bật
+            Giải Pháp Toàn Diện
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Công cụ toàn diện giúp bạn theo dõi, cải thiện và lan tỏa phong cách sống bền vững
+            Từ phòng khách đến phòng ngủ, từ nhà bếp đến phòng tắm - Ecomate đồng hành cùng mọi không gian sống
           </p>
         </motion.div>
 
@@ -817,19 +817,19 @@ function ImpactSection() {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-5xl font-bold mb-6">
-            Cùng Nhau Tạo Nên Tác Động
+            Hành Trình Cùng Khách Hàng
           </h2>
           <p className="text-xl mb-12 opacity-90 max-w-2xl mx-auto">
-            Hơn 50,000 thành viên đã tiết kiệm được 2 triệu tấn CO₂,
-            tương đương với việc trồng 90 triệu cây xanh
+            15,000+ gia đình Việt đã tin tưởng và lựa chọn Ecomate,
+            biến ngôi nhà thành không gian sống lý tưởng
           </p>
 
           <div className="grid md:grid-cols-4 gap-8 mt-16">
             {[
-              { icon: '🌳', number: '90M+', label: 'Cây xanh tương đương' },
-              { icon: '⚡', number: '500K+', label: 'kWh tiết kiệm' },
-              { icon: '♻️', number: '300K+', label: 'Tấn rác tái chế' },
-              { icon: '💧', number: '1M+', label: 'Lít nước tiết kiệm' },
+              { icon: '🏠', number: '15K+', label: 'Gia đình tin dùng' },
+              { icon: '📦', number: '50K+', label: 'Sản phẩm bán ra' },
+              { icon: '⭐', number: '4.9/5', label: 'Đánh giá trung bình' },
+              { icon: '🚚', number: '24h', label: 'Giao hàng nhanh' },
             ].map((item, index) => (
               <motion.div
                 key={index}
@@ -888,22 +888,22 @@ function TestimonialsSection() {
 
   const testimonials = [
     {
-      name: 'Nguyễn Minh Anh',
-      role: 'Founder, GreenTech Startup',
-      content: 'EcoMate đã thay đổi hoàn toàn cách tôi nhìn nhận về tác động môi trường. Sau 3 tháng, tôi đã giảm 40% lượng phát thải carbon!',
+      name: 'Chị Nguyễn Thu Hà',
+      role: 'Nội trợ, Quận 7, TP.HCM',
+      content: 'Mua bộ kệ bếp thông minh của Ecomate, gian bếp nhà mình gọn gàng hơn hẳn. Giá cả phải chăng, chất lượng tốt, giao hàng nhanh. Rất hài lòng!',
       avatar: '👩',
     },
     {
-      name: 'Trần Hoàng Long',
-      role: 'Marketing Manager',
-      content: 'Giao diện trực quan, dữ liệu chi tiết và cộng đồng hỗ trợ nhiệt tình. Đây là công cụ tôi đã tìm kiếm từ lâu.',
+      name: 'Anh Trần Minh Quân',
+      role: 'Kỹ sư IT, Hà Nội',
+      content: 'Đèn LED thông minh điều khiển bằng app rất tiện. Setup dễ dàng, tiết kiệm điện đáng kể. Nhà mình giờ hiện đại hơn nhiều. Recommend!',
       avatar: '👨',
     },
     {
-      name: 'Lê Thu Hà',
-      role: 'Teacher',
-      content: 'Tôi sử dụng EcoMate để dạy học sinh về bảo vệ môi trường. Các em rất hứng thú và tích cực tham gia!',
-      avatar: '👩‍🏫',
+      name: 'Chị Phạm Lan Anh',
+      role: 'Kinh doanh online, Đà Nẵng',
+      content: 'Mua máy khuếch tán tinh dầu và đèn ngủ cho phòng ngủ. Chất lượng vượt mong đợi với mức giá này. Sẽ ủng hộ Ecomate lâu dài!',
+      avatar: '👩‍💼',
     },
   ];
 
@@ -930,10 +930,10 @@ function TestimonialsSection() {
           className="text-center mb-16"
         >
           <h2 className="text-5xl font-bold text-gray-900 mb-4">
-            Người Dùng Nói Gì
+            Khách Hàng Nói Gì
           </h2>
           <p className="text-xl text-gray-600">
-            Những câu chuyện truyền cảm hứng từ cộng đồng
+            Phản hồi chân thực từ những gia đình đã tin tưởng Ecomate
           </p>
         </motion.div>
 
@@ -1123,7 +1123,7 @@ function FinalCTASection({ onSubmit, email, setEmail }: any) {
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
             >
-              Sẵn Sàng Tạo Thay Đổi?
+              Sẵn Sàng Nâng Cấp Ngôi Nhà?
             </motion.h2>
             <motion.p
               className="text-xl mb-10 opacity-90 max-w-2xl mx-auto"
@@ -1132,8 +1132,8 @@ function FinalCTASection({ onSubmit, email, setEmail }: any) {
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
             >
-              Tham gia cùng 50,000+ người đang xây dựng tương lai bền vững.
-              Bắt đầu hành trình của bạn ngay hôm nay!
+              Khám phá 5,000+ sản phẩm tiện ích tại Shopee Store.
+              Mua sắm dễ dàng, giao hàng nhanh chóng ngay hôm nay!
             </motion.p>
 
             <FinalMagneticCTA onSubmit={onSubmit} email={email} setEmail={setEmail} />
@@ -1174,7 +1174,7 @@ function FinalMagneticCTA({ onSubmit, email, setEmail }: any) {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Nhập email của bạn"
+          placeholder="Nhập email nhận ưu đãi đặc biệt"
           required
           inputSize="lg"
           className="flex-1 border-0 bg-white text-gray-900 focus:ring-2 focus:ring-white/50"
@@ -1204,7 +1204,7 @@ function FinalMagneticCTA({ onSubmit, email, setEmail }: any) {
             size="lg"
             className="px-8 bg-white text-primary-600 hover:bg-gray-100 shadow-lg whitespace-nowrap relative overflow-hidden group"
           >
-            <span className="relative z-10 font-bold">Bắt Đầu Miễn Phí →</span>
+            <span className="relative z-10 font-bold">Mua Ngay Trên Shopee →</span>
             <motion.div
               className="absolute inset-0 bg-gradient-to-r from-primary-100 to-primary-50"
               initial={{ x: '-100%' }}
@@ -1221,7 +1221,7 @@ function FinalMagneticCTA({ onSubmit, email, setEmail }: any) {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6 }}
       >
-        🎉 Đăng ký miễn phí • ⚡ Kích hoạt ngay lập tức • 🔒 Bảo mật tuyệt đối
+        🎁 Miễn phí vận chuyển • ⚡ Giao hàng trong 24h • 🔒 Thanh toán an toàn
       </motion.p>
     </motion.form>
   );
