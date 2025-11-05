@@ -80,15 +80,15 @@ function useMagneticEffect(ref: React.RefObject<HTMLElement | null>, strength = 
   return { x: springX, y: springY };
 }
 
-// High-quality Unsplash images for Vietnamese ecosystem theme
+// High-quality Unsplash images for Ecomate smart home theme
 const IMAGES = {
-  hero: 'https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=3432&auto=format&fit=crop', // Vietnamese forest
-  heroOverlay: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=3413&auto=format&fit=crop', // Green leaves
-  feature1: 'https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?q=80&w=3540&auto=format&fit=crop', // Sustainable living
-  feature2: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=3540&auto=format&fit=crop', // Green tech
-  impact: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=3540&auto=format&fit=crop', // Community planting
-  testimonial: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=3413&auto=format&fit=crop', // Nature background
-  cta: 'https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=3432&auto=format&fit=crop', // Forest sunset
+  hero: 'https://images.unsplash.com/photo-1556912167-f556f1f39faa?q=80&w=3540&auto=format&fit=crop', // Modern smart living room
+  heroOverlay: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=3456&auto=format&fit=crop', // Smart home controls
+  feature1: 'https://images.unsplash.com/photo-1556911220-bff31c812dba?q=80&w=3568&auto=format&fit=crop', // Modern organized kitchen
+  feature2: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=3432&auto=format&fit=crop', // Smart bedroom lighting
+  impact: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=3540&auto=format&fit=crop', // Happy family in modern home
+  testimonial: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=3387&auto=format&fit=crop', // Cozy interior
+  cta: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=3453&auto=format&fit=crop', // Modern apartment setup
 };
 
 interface VariantProps {
@@ -218,20 +218,21 @@ export default function VariantD({ variant }: VariantProps) {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary-50 via-white to-primary-50 relative">
-      {/* Cursor Trail Effect */}
+      {/* Warm Ambient Cursor Trail Effect */}
       <div className="fixed inset-0 pointer-events-none z-50">
         {cursorTrail.map((point, index) => (
           <motion.div
             key={point.id}
-            className="absolute w-3 h-3 bg-primary-400 rounded-full"
-            initial={{ opacity: 0.6, scale: 1 }}
-            animate={{ opacity: 0, scale: 0 }}
-            transition={{ duration: 0.6 }}
+            className="absolute w-4 h-4 rounded-full"
             style={{
-              left: point.x - 6,
-              top: point.y - 6,
-              filter: 'blur(2px)',
+              background: 'radial-gradient(circle, rgba(251, 191, 36, 0.8) 0%, rgba(245, 158, 11, 0.4) 50%, transparent 70%)',
+              left: point.x - 8,
+              top: point.y - 8,
+              filter: 'blur(3px)',
             }}
+            initial={{ opacity: 0.7, scale: 1 }}
+            animate={{ opacity: 0, scale: 0.5 }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
           />
         ))}
       </div>
@@ -251,49 +252,66 @@ export default function VariantD({ variant }: VariantProps) {
           <div className="absolute inset-0">
             <Image
               src={IMAGES.hero}
-              alt="Vietnamese Forest Background"
+              alt="Modern Smart Living Room"
               fill
               priority
               className="object-cover float-1"
-              style={{ objectPosition: 'center 40%' }}
+              style={{ objectPosition: 'center center' }}
             />
-            {/* Enhanced gradient overlays for better text contrast */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-primary-50/90" />
-            <div className="absolute inset-0 bg-gradient-to-r from-primary-900/40 via-primary-800/20 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-t from-primary-50/80 via-transparent to-transparent" />
+            {/* Warm gradient overlays for cozy home feeling */}
+            <div className="absolute inset-0 bg-gradient-to-b from-amber-900/40 via-orange-900/20 to-primary-50/95" />
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-900/50 via-slate-800/30 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-primary-50/90 via-transparent to-transparent" />
+
+            {/* Ambient warm glow effect - breathing animation */}
+            <motion.div
+              className="absolute inset-0 bg-gradient-radial from-amber-500/10 via-transparent to-transparent"
+              animate={{
+                opacity: [0.3, 0.5, 0.3],
+                scale: [1, 1.1, 1],
+              }}
+              transition={{
+                duration: 8,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+            />
           </div>
 
-          {/* Floating overlay image with parallax effect */}
+          {/* Smart home controls overlay with subtle parallax */}
           <motion.div
-            className="absolute top-0 right-0 w-1/2 h-full opacity-40 float-2"
-            style={{ y: useTransform(scrollYProgress, [0, 1], ['0%', '30%']) }}
+            className="absolute top-0 right-0 w-1/3 h-full opacity-30 float-2"
+            style={{ y: useTransform(scrollYProgress, [0, 1], ['0%', '15%']) }}
           >
             <Image
               src={IMAGES.heroOverlay}
-              alt="Green Leaves Overlay"
+              alt="Smart Home Controls"
               fill
-              className="object-cover mix-blend-overlay"
+              className="object-cover mix-blend-soft-light"
             />
           </motion.div>
 
-          {/* Animated light particles */}
+          {/* Soft ambient light particles - slower, warmer */}
           <div className="absolute inset-0 float-3">
-            {[...Array(20)].map((_, i) => (
+            {[...Array(15)].map((_, i) => (
               <motion.div
                 key={i}
-                className="absolute w-1 h-1 bg-primary-300 rounded-full"
+                className="absolute w-2 h-2 rounded-full"
                 style={{
                   left: `${Math.random() * 100}%`,
                   top: `${Math.random() * 100}%`,
+                  background: 'radial-gradient(circle, rgba(251, 191, 36, 0.6) 0%, transparent 70%)',
                 }}
                 animate={{
-                  y: [-20, 20],
-                  opacity: [0.2, 0.6, 0.2],
+                  y: [-10, 10],
+                  opacity: [0.2, 0.4, 0.2],
+                  scale: [1, 1.2, 1],
                 }}
                 transition={{
-                  duration: 3 + Math.random() * 2,
+                  duration: 5 + Math.random() * 3,
                   repeat: Infinity,
-                  delay: Math.random() * 2,
+                  delay: Math.random() * 3,
+                  ease: 'easeInOut',
                 }}
               />
             ))}
@@ -316,43 +334,43 @@ export default function VariantD({ variant }: VariantProps) {
               </span>
             </motion.div>
 
-            {/* Hero Title with improved typography and contrast */}
+            {/* Hero Title with warm, welcoming typography */}
             <h1
               className="hero-title text-6xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight"
               style={{
                 color: '#ffffff',
-                textShadow: '0 2px 10px rgba(0,0,0,0.3), 0 4px 20px rgba(0,0,0,0.2), 0 0 40px rgba(34, 197, 94, 0.3)',
+                textShadow: '0 2px 10px rgba(0,0,0,0.4), 0 4px 20px rgba(0,0,0,0.3), 0 0 40px rgba(251, 146, 60, 0.2)',
               }}
             >
               Tiện Ích{' '}
               <span
                 className="relative inline-block"
                 style={{
-                  background: 'linear-gradient(135deg, #86efac 0%, #22c55e 100%)',
+                  background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   backgroundClip: 'text',
-                  filter: 'drop-shadow(0 0 30px rgba(34, 197, 94, 0.5))',
+                  filter: 'drop-shadow(0 0 30px rgba(251, 191, 36, 0.6))',
                 }}
               >
                 Mỗi Ngày
                 <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 200 12" fill="none">
-                  <path d="M2 10C50 2 150 2 198 10" stroke="#22c55e" strokeWidth="3" strokeLinecap="round"/>
+                  <path d="M2 10C50 2 150 2 198 10" stroke="#fbbf24" strokeWidth="3" strokeLinecap="round"/>
                 </svg>
               </span>
               <br />
               Trong Từng Căn Phòng
             </h1>
 
-            {/* Hero Subtitle with better contrast */}
+            {/* Hero Subtitle with warm, inviting tone */}
             <p
               className="hero-subtitle text-xl md:text-2xl mb-10 max-w-3xl mx-auto leading-relaxed font-medium"
               style={{
-                color: '#f3f4f6',
-                textShadow: '0 2px 8px rgba(0,0,0,0.4), 0 1px 4px rgba(0,0,0,0.3)',
+                color: '#fef3c7',
+                textShadow: '0 2px 8px rgba(0,0,0,0.5), 0 1px 4px rgba(0,0,0,0.4)',
               }}
             >
-              Khám phá <span className="text-primary-300 font-bold">giải pháp nhà thông minh</span> và tiện ích gia dụng hiện đại,
+              Khám phá <span className="text-amber-200 font-bold">giải pháp nhà thông minh</span> và tiện ích gia dụng hiện đại,
               biến không gian sống của bạn thành nơi an lạc, tiện nghi và đầy cảm hứng
             </p>
 
@@ -497,10 +515,10 @@ function AnimatedStats() {
           transition={{ delay: index * 0.2, type: 'spring', stiffness: 100 }}
           className="text-center"
         >
-          <div className="text-4xl font-bold text-primary-600">
+          <div className="text-4xl font-bold text-amber-600">
             <CountUp end={stat.value} suffix={stat.suffix} />
           </div>
-          <div className="text-sm text-gray-600 mt-1">{stat.label}</div>
+          <div className="text-sm text-slate-700 mt-1">{stat.label}</div>
         </motion.div>
       ))}
     </div>
@@ -779,32 +797,45 @@ function ImpactSection() {
 
   return (
     <section ref={sectionRef} className="py-20 px-4 relative overflow-hidden min-h-[600px] flex items-center">
-      {/* Background Image with Overlay */}
+      {/* Background Image with Warm Home Overlays */}
       <div className="absolute inset-0 -z-10">
         <div className="impact-bg absolute inset-0">
           <Image
             src={IMAGES.impact}
-            alt="Community Impact"
+            alt="Happy Family in Modern Home"
             fill
             className="object-cover"
           />
         </div>
-        {/* Multi-layer gradient overlays for depth */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-600/95 via-primary-700/90 to-primary-800/95" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/20" />
-        {/* Animated light rays */}
+        {/* Warm, inviting gradient overlays */}
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-600/90 via-orange-600/85 to-amber-700/90" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-slate-900/30" />
+        {/* Ambient warm glow sweep */}
         <motion.div
-          className="absolute inset-0 opacity-20"
+          className="absolute inset-0 opacity-15"
           style={{
-            background: 'linear-gradient(45deg, transparent 30%, white 50%, transparent 70%)',
+            background: 'linear-gradient(45deg, transparent 30%, rgba(251, 191, 36, 0.8) 50%, transparent 70%)',
           }}
           animate={{
             x: ['-100%', '200%'],
           }}
           transition={{
-            duration: 8,
+            duration: 10,
             repeat: Infinity,
             ease: 'linear',
+          }}
+        />
+        {/* Breathing ambient light */}
+        <motion.div
+          className="absolute inset-0 bg-gradient-radial from-amber-400/20 via-transparent to-transparent"
+          animate={{
+            opacity: [0.2, 0.4, 0.2],
+            scale: [1, 1.2, 1],
+          }}
+          transition={{
+            duration: 6,
+            repeat: Infinity,
+            ease: 'easeInOut',
           }}
         />
       </div>
@@ -1050,57 +1081,74 @@ function FinalCTASection({ onSubmit, email, setEmail }: any) {
 
   return (
     <section ref={sectionRef} className="py-24 px-4 relative overflow-hidden">
-      {/* Dramatic Background Image */}
+      {/* Warm, Inviting Background Image */}
       <div className="absolute inset-0 -z-10">
         <div className="cta-bg absolute inset-0">
           <Image
             src={IMAGES.cta}
-            alt="Forest Sunset"
+            alt="Modern Apartment Setup"
             fill
             className="object-cover"
           />
         </div>
-        {/* Multi-layer overlays for depth and drama */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-600/90 via-primary-700/85 to-primary-900/90" />
-        <div className="absolute inset-0 bg-gradient-radial from-transparent via-primary-600/30 to-primary-900/70" />
+        {/* Warm home gradient overlays */}
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-600/88 via-orange-600/85 to-amber-800/90" />
+        <div className="absolute inset-0 bg-gradient-radial from-transparent via-amber-500/20 to-slate-900/60" />
 
-        {/* Animated particles */}
+        {/* Soft ambient particles */}
         <div className="absolute inset-0">
-          {[...Array(30)].map((_, i) => (
+          {[...Array(20)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-2 h-2 bg-white rounded-full"
+              className="absolute w-3 h-3 rounded-full"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
+                background: 'radial-gradient(circle, rgba(251, 191, 36, 0.8) 0%, transparent 70%)',
+                filter: 'blur(2px)',
               }}
               animate={{
-                y: [0, -30, 0],
-                opacity: [0, 0.7, 0],
-                scale: [0, 1, 0],
+                y: [0, -20, 0],
+                opacity: [0, 0.6, 0],
+                scale: [0.8, 1.2, 0.8],
               }}
               transition={{
-                duration: 4 + Math.random() * 3,
+                duration: 5 + Math.random() * 4,
                 repeat: Infinity,
-                delay: Math.random() * 3,
+                delay: Math.random() * 4,
+                ease: 'easeInOut',
               }}
             />
           ))}
         </div>
 
-        {/* Animated gradient sweep */}
+        {/* Warm ambient glow sweep */}
         <motion.div
           className="absolute inset-0"
           style={{
-            background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)',
+            background: 'linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.15), transparent)',
           }}
           animate={{
             x: ['-100%', '200%'],
           }}
           transition={{
-            duration: 5,
+            duration: 6,
             repeat: Infinity,
             ease: 'linear',
+          }}
+        />
+
+        {/* Breathing light effect */}
+        <motion.div
+          className="absolute inset-0 bg-gradient-radial from-amber-300/10 via-transparent to-transparent"
+          animate={{
+            opacity: [0.3, 0.5, 0.3],
+            scale: [1, 1.15, 1],
+          }}
+          transition={{
+            duration: 7,
+            repeat: Infinity,
+            ease: 'easeInOut',
           }}
         />
       </div>
