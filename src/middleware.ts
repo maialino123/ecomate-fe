@@ -14,8 +14,10 @@ const SUBDOMAIN_MAPPING: Record<string, string> = {
 };
 
 /**
- * Proxy for handling subdomain routing (Next.js 16+)
- * Previously called "middleware" in Next.js 15
+ * Middleware for handling subdomain routing
+ *
+ * Note: While Next.js 16 introduces "proxy" convention, we're using "middleware"
+ * for better Vercel compatibility until their build system fully supports proxy.ts
  *
  * Subdomain Strategy:
  * - variant-a.ecomate.vn → /landing/A
@@ -31,7 +33,7 @@ const SUBDOMAIN_MAPPING: Record<string, string> = {
  * 127.0.0.1 variant-c.localhost
  * 127.0.0.1 variant-d.localhost
  */
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
   const hostname = request.headers.get('host') || '';
 

@@ -51,6 +51,8 @@ module.exports = nextConfig
 
 File: `src/middleware.ts`
 
+**Note**: Next.js 16 introduces a new "proxy.ts" convention, but we use "middleware.ts" for better Vercel compatibility until their build infrastructure fully supports the new convention.
+
 The middleware will:
 1. Extract subdomain from request
 2. Rewrite URL to appropriate variant
