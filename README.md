@@ -4,14 +4,27 @@ Landing pages với A/B Testing được xây dựng với Next.js 14+ (App Rout
 
 ## 🚀 Features
 
-- ✅ **Next.js 14+** với App Router
+- ✅ **Next.js 16** với App Router & Turbopack
 - ✅ **TypeScript** cho type safety
-- ✅ **Tailwind CSS** cho styling
+- ✅ **Tailwind CSS v4** cho styling
+- ✅ **Component-Driven Development (CDD)** với Radix UI
 - ✅ **A/B Testing** với middleware
 - ✅ **3 Landing Page Variants**:
   - **Variant A**: Professional & Trust-focused (stats, credibility)
   - **Variant B**: Emotional & Impact-focused (urgency, stories)
   - **Variant C**: Simple & Action-focused (minimalist, clear CTA)
+- ✅ **Base Components Library** (10 components):
+  - Button (7 variants, 5 sizes)
+  - Input (3 variants, 3 sizes)
+  - Card (compound component)
+  - Dialog (Radix UI powered)
+  - Checkbox, RadioGroup, Switch
+  - Select (dropdown)
+  - Tooltip
+  - Label
+- ✅ **Storybook** - Component documentation & playground
+- ✅ **Jest + Testing Library** - 29 tests passing
+- ✅ **Design Tokens** (colors, typography, spacing)
 - ✅ **Analytics Tracking** system
 - ✅ **Cookie-based** user assignment
 - ✅ **Edge Middleware** cho performance
@@ -30,20 +43,28 @@ ecomate-fe/
 │   │   │       └── route.ts       # Analytics API endpoint
 │   │   ├── layout.tsx             # Root layout
 │   │   ├── page.tsx               # Home (redirects to /landing)
-│   │   └── globals.css            # Global styles + Tailwind
+│   │   └── globals.css            # Global styles + Design tokens
 │   ├── components/
+│   │   ├── ui/                    # Base component library (CDD)
+│   │   │   ├── button.tsx         # Button component
+│   │   │   ├── input.tsx          # Input component
+│   │   │   ├── card.tsx           # Card compound component
+│   │   │   ├── dialog.tsx         # Dialog (Radix UI)
+│   │   │   └── index.ts           # Exports
 │   │   └── landing/
-│   │       ├── VariantA.tsx       # Variant A component
-│   │       ├── VariantB.tsx       # Variant B component
-│   │       └── VariantC.tsx       # Variant C component
+│   │       ├── VariantA.tsx       # Variant A (uses base components)
+│   │       ├── VariantB.tsx       # Variant B (uses base components)
+│   │       └── VariantC.tsx       # Variant C (uses base components)
 │   └── lib/
 │       ├── ab-testing/
 │       │   └── index.ts           # A/B testing logic
-│       └── analytics/
-│           └── index.ts           # Analytics utilities
+│       ├── analytics/
+│       │   └── index.ts           # Analytics utilities
+│       └── utils.ts               # cn() helper for class merging
 ├── middleware.ts                   # Edge middleware for A/B routing
-├── tailwind.config.ts
+├── tailwind.config.ts              # Design tokens + theme
 ├── tsconfig.json
+├── COMPONENTS.md                   # Component library documentation
 └── package.json
 ```
 
@@ -74,6 +95,20 @@ Mở [http://localhost:3000](http://localhost:3000)
 ```bash
 npm run build
 npm start
+```
+
+### Run Storybook
+```bash
+npm run storybook
+```
+
+Visit [http://localhost:6006](http://localhost:6006) to view component library.
+
+### Run Tests
+```bash
+npm test                 # Run all tests
+npm run test:watch      # Watch mode
+npm run test:coverage   # Coverage report
 ```
 
 ## 🧪 Testing Variants
@@ -134,6 +169,61 @@ export const DEFAULT_AB_CONFIG: ABTestConfig = {
 | **Messaging** | Trust & Stats | Urgency & Impact | Simple & Direct |
 | **CTA** | "Get Started" | "Join the Movement" | "Start Free Today" |
 | **Social Proof** | Numbers & ratings | Testimonials & stories | Company logos |
+
+## 🧩 Component Library (CDD)
+
+Project này sử dụng **Component-Driven Development (CDD)** pattern với base components được xây dựng trên **Radix UI**.
+
+### Available Components:
+
+#### Button
+```tsx
+import { Button } from '@/components/ui';
+
+// 7 variants: default, primary, secondary, ghost, outline, destructive, link
+<Button variant="primary" size="lg">Sign Up</Button>
+```
+
+#### Input
+```tsx
+import { Input } from '@/components/ui';
+
+// 3 variants: default, error, success
+<Input inputSize="lg" placeholder="Enter email" />
+```
+
+#### Card
+```tsx
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
+
+<Card variant="elevated" hover="lift">
+  <CardHeader>
+    <CardTitle>Title</CardTitle>
+  </CardHeader>
+  <CardContent>Content here</CardContent>
+</Card>
+```
+
+#### Dialog
+```tsx
+import { Dialog, DialogTrigger, DialogContent } from '@/components/ui';
+
+<Dialog>
+  <DialogTrigger asChild>
+    <Button>Open</Button>
+  </DialogTrigger>
+  <DialogContent>Content here</DialogContent>
+</Dialog>
+```
+
+### Features:
+- ✅ **Radix UI primitives** - Accessibility built-in
+- ✅ **CVA (Class Variance Authority)** - Type-safe variants
+- ✅ **Composable** - Combine để tạo complex UIs
+- ✅ **Full TypeScript support**
+- ✅ **Tailwind CSS** styling với design tokens
+
+📖 **Full documentation:** See [COMPONENTS.md](./COMPONENTS.md)
 
 ## 📈 Next Steps
 

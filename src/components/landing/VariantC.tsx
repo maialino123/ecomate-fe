@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import type { Variant } from '@/lib/ab-testing';
+import { Button, Input } from '@/components/ui';
 
 interface VariantProps {
   variant: Variant;
@@ -10,6 +11,7 @@ interface VariantProps {
 /**
  * Variant C: Simple & Action-focused
  * Minimalist design with clear, direct CTA
+ * Now using base components from UI library
  */
 export default function VariantC({ variant }: VariantProps) {
   const [email, setEmail] = useState('');
@@ -46,22 +48,25 @@ export default function VariantC({ variant }: VariantProps) {
               Simple. Effective. Free.
             </p>
 
-            {/* Big CTA */}
+            {/* Big CTA - Using base components */}
             <form onSubmit={handleSubmit} className="max-w-md mx-auto">
-              <input
+              <Input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 required
-                className="w-full px-6 py-5 text-lg rounded-lg border-2 border-gray-300 focus:outline-none focus:border-green-500 mb-4"
+                inputSize="lg"
+                className="w-full mb-4 border-2"
               />
-              <button
+              <Button
                 type="submit"
-                className="w-full px-8 py-5 bg-green-600 text-white font-bold text-lg rounded-lg hover:bg-green-700 transition-colors shadow-lg"
+                variant="primary"
+                size="xl"
+                className="w-full shadow-lg"
               >
                 Get Started Now →
-              </button>
+              </Button>
               <p className="text-sm text-gray-500 mt-4">
                 No spam. Unsubscribe anytime.
               </p>
@@ -126,18 +131,20 @@ export default function VariantC({ variant }: VariantProps) {
             </div>
           </div>
 
-          {/* Repeat CTA */}
+          {/* Repeat CTA - Using base components */}
           <div className="mt-24 text-center p-12 bg-gray-50 rounded-2xl">
             <h3 className="text-3xl font-bold text-gray-900 mb-6">
               Ready to make an impact?
             </h3>
             <form onSubmit={handleSubmit} className="max-w-md mx-auto">
-              <button
+              <Button
                 type="submit"
-                className="w-full px-8 py-5 bg-green-600 text-white font-bold text-lg rounded-lg hover:bg-green-700 transition-colors shadow-lg"
+                variant="primary"
+                size="xl"
+                className="w-full shadow-lg"
               >
                 Start Free Today →
-              </button>
+              </Button>
             </form>
           </div>
 

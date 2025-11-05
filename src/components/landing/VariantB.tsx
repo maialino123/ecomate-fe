@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import type { Variant } from '@/lib/ab-testing';
+import { Button, Input, Card, CardContent } from '@/components/ui';
 
 interface VariantProps {
   variant: Variant;
@@ -10,6 +11,7 @@ interface VariantProps {
 /**
  * Variant B: Emotional & Impact-focused
  * Emphasizes environmental urgency and emotional connection
+ * Now using base components from UI library
  */
 export default function VariantB({ variant }: VariantProps) {
   const [email, setEmail] = useState('');
@@ -51,20 +53,22 @@ export default function VariantB({ variant }: VariantProps) {
             </p>
             <form onSubmit={handleSubmit}>
               <div className="flex flex-col gap-3">
-                <input
+                <Input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Your email address"
                   required
-                  className="px-6 py-4 rounded-lg border-2 border-emerald-300 focus:outline-none focus:ring-2 focus:ring-emerald-400 text-gray-900 text-lg"
+                  inputSize="lg"
+                  className="border-2 border-emerald-300 focus-visible:ring-emerald-400 text-gray-900"
                 />
-                <button
+                <Button
                   type="submit"
-                  className="px-8 py-4 bg-emerald-500 text-white font-bold text-lg rounded-lg hover:bg-emerald-400 transition-all transform hover:scale-105 shadow-xl"
+                  size="xl"
+                  className="bg-emerald-500 hover:bg-emerald-400 shadow-xl hover:scale-105"
                 >
                   Join the Movement - It&apos;s Free
-                </button>
+                </Button>
               </div>
             </form>
           </div>
