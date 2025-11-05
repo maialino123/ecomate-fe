@@ -82,13 +82,13 @@ function useMagneticEffect(ref: React.RefObject<HTMLElement | null>, strength = 
 
 // High-quality Unsplash images for Ecomate smart home theme
 const IMAGES = {
-  hero: 'https://images.unsplash.com/photo-1556912167-f556f1f39faa?q=80&w=3540&auto=format&fit=crop', // Modern smart living room
-  heroOverlay: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=3456&auto=format&fit=crop', // Smart home controls
-  feature1: 'https://images.unsplash.com/photo-1556911220-bff31c812dba?q=80&w=3568&auto=format&fit=crop', // Modern organized kitchen
-  feature2: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=3432&auto=format&fit=crop', // Smart bedroom lighting
-  impact: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=3540&auto=format&fit=crop', // Happy family in modern home
-  testimonial: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=3387&auto=format&fit=crop', // Cozy interior
-  cta: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=3453&auto=format&fit=crop', // Modern apartment setup
+  hero: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=3540&auto=format&fit=crop', // Bright modern living room
+  heroOverlay: 'https://images.unsplash.com/photo-1585412727339-54e4bae3bbf9?q=80&w=3540&auto=format&fit=crop', // Smart home tablet
+  feature1: 'https://images.unsplash.com/photo-1556909212-d5b604d0c90d?q=80&w=3540&auto=format&fit=crop', // Modern kitchen interior
+  feature2: 'https://images.unsplash.com/photo-1617104678098-ab8e2a3e8c66?q=80&w=3540&auto=format&fit=crop', // Bedroom with warm lighting
+  impact: 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=3540&auto=format&fit=crop', // Modern family home
+  testimonial: 'https://images.unsplash.com/photo-1600607687644-aac4c3eac7f4?q=80&w=3540&auto=format&fit=crop', // Cozy home interior
+  cta: 'https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=3540&auto=format&fit=crop', // Beautiful modern apartment
 };
 
 interface VariantProps {
@@ -449,7 +449,7 @@ function MagneticCTA({ onSubmit, email, setEmail }: any) {
           placeholder="Nhập email nhận ưu đãi 20%"
           required
           inputSize="lg"
-          className="flex-1 border-0 focus:ring-2 focus:ring-primary-400 transition-all"
+          className="flex-1 border-0 focus:ring-2 focus:ring-amber-400 transition-all"
         />
         <motion.div
           ref={buttonRef}
@@ -567,7 +567,7 @@ function FeaturesSection() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Animate background images on scroll
+      // Animate background images on scroll with rotation
       gsap.to('.feature-bg-1', {
         scrollTrigger: {
           trigger: '.feature-bg-1',
@@ -577,6 +577,7 @@ function FeaturesSection() {
         },
         y: 100,
         scale: 1.1,
+        rotation: 3,
       });
 
       gsap.to('.feature-bg-2', {
@@ -588,6 +589,37 @@ function FeaturesSection() {
         },
         y: -50,
         scale: 1.05,
+        rotation: -3,
+      });
+
+      // Dramatic section title reveal
+      gsap.from('.features-title', {
+        scrollTrigger: {
+          trigger: '.features-title',
+          start: 'top 85%',
+          once: true,
+          toggleActions: 'play none none none',
+        },
+        scale: 0.5,
+        y: 80,
+        opacity: 0,
+        duration: 1.2,
+        ease: 'elastic.out(1, 0.7)',
+      });
+
+      // Subtitle wave reveal
+      gsap.from('.features-subtitle', {
+        scrollTrigger: {
+          trigger: '.features-subtitle',
+          start: 'top 85%',
+          once: true,
+          toggleActions: 'play none none none',
+        },
+        y: 40,
+        opacity: 0,
+        duration: 0.8,
+        delay: 0.4,
+        ease: 'power3.out',
       });
     }, sectionRef);
 
@@ -652,20 +684,14 @@ function FeaturesSection() {
       </div>
 
       <div className="container mx-auto max-w-7xl relative">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-5xl font-bold text-gray-900 mb-4">
+        <div className="text-center mb-16">
+          <h2 className="features-title text-5xl font-bold text-gray-900 mb-4">
             Giải Pháp Toàn Diện
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="features-subtitle text-xl text-gray-600 max-w-2xl mx-auto">
             Từ phòng khách đến phòng ngủ, từ nhà bếp đến phòng tắm - Ecomate đồng hành cùng mọi không gian sống
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature, index) => (
@@ -767,6 +793,19 @@ function ImpactSection() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Progressive image reveal with clip-path animation
+      gsap.from('.impact-bg', {
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 80%',
+          once: true,
+          toggleActions: 'play none none none',
+        },
+        clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 0)',
+        duration: 1.5,
+        ease: 'power3.out',
+      });
+
       // Zoom effect on scroll
       gsap.to('.impact-bg', {
         scrollTrigger: {
@@ -778,17 +817,51 @@ function ImpactSection() {
         scale: 1.2,
       });
 
-      // Reveal effect for stats
+      // Impressive bounce reveal for stats with scale + rotation
       gsap.from('.impact-stat', {
         scrollTrigger: {
           trigger: '.impact-stat',
           start: 'top 80%',
+          once: true,
+          toggleActions: 'play none none none',
         },
-        y: 50,
+        scale: 0,
+        y: 80,
+        rotation: -15,
         opacity: 0,
-        stagger: 0.2,
+        stagger: 0.15,
+        duration: 1.2,
+        ease: 'elastic.out(1, 0.6)',
+      });
+
+      // Dramatic title reveal with split animation
+      gsap.from('.impact-title', {
+        scrollTrigger: {
+          trigger: '.impact-title',
+          start: 'top 85%',
+          once: true,
+          toggleActions: 'play none none none',
+        },
+        y: 100,
+        opacity: 0,
+        scale: 0.8,
+        duration: 1,
+        ease: 'power4.out',
+      });
+
+      // Description slide in from left
+      gsap.from('.impact-description', {
+        scrollTrigger: {
+          trigger: '.impact-description',
+          start: 'top 85%',
+          once: true,
+          toggleActions: 'play none none none',
+        },
+        x: -100,
+        opacity: 0,
         duration: 1,
         ease: 'power3.out',
+        delay: 0.3,
       });
     }, sectionRef);
 
@@ -841,16 +914,11 @@ function ImpactSection() {
       </div>
 
       <div className="container mx-auto max-w-6xl text-center text-white relative z-10">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="text-5xl font-bold mb-6">
+        <div>
+          <h2 className="impact-title text-5xl font-bold mb-6">
             Hành Trình Cùng Khách Hàng
           </h2>
-          <p className="text-xl mb-12 opacity-90 max-w-2xl mx-auto">
+          <p className="impact-description text-xl mb-12 opacity-90 max-w-2xl mx-auto">
             15,000+ gia đình Việt đã tin tưởng và lựa chọn Ecomate,
             biến ngôi nhà thành không gian sống lý tưởng
           </p>
@@ -862,21 +930,17 @@ function ImpactSection() {
               { icon: '⭐', number: '4.9/5', label: 'Đánh giá trung bình' },
               { icon: '🚚', number: '24h', label: 'Giao hàng nhanh' },
             ].map((item, index) => (
-              <motion.div
+              <div
                 key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="impact-stat text-center backdrop-blur-sm bg-white/10 rounded-2xl p-6"
+                className="impact-stat text-center backdrop-blur-sm bg-white/10 rounded-2xl p-6 hover:bg-white/20 transition-all cursor-pointer"
               >
                 <div className="text-6xl mb-4">{item.icon}</div>
                 <div className="text-4xl font-bold mb-2">{item.number}</div>
                 <div className="text-lg opacity-90">{item.label}</div>
-              </motion.div>
+              </div>
             ))}
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
@@ -900,16 +964,50 @@ function TestimonialsSection() {
         opacity: 0.15,
       });
 
-      // Card reveal animation
+      // Dramatic 3D flip card reveal animation
       gsap.from('.testimonial-card', {
         scrollTrigger: {
           trigger: '.testimonial-card',
           start: 'top 85%',
+          once: true,
+          toggleActions: 'play none none none',
         },
+        rotationY: -90,
         y: 60,
         opacity: 0,
-        stagger: 0.15,
+        transformOrigin: 'left center',
+        stagger: 0.2,
+        duration: 1.2,
+        ease: 'back.out(1.7)',
+      });
+
+      // Section title dramatic reveal
+      gsap.from('.testimonials-title', {
+        scrollTrigger: {
+          trigger: '.testimonials-title',
+          start: 'top 85%',
+          once: true,
+          toggleActions: 'play none none none',
+        },
+        scale: 0.5,
+        y: 50,
+        opacity: 0,
+        duration: 1,
+        ease: 'power4.out',
+      });
+
+      // Subtitle slide in
+      gsap.from('.testimonials-subtitle', {
+        scrollTrigger: {
+          trigger: '.testimonials-subtitle',
+          start: 'top 85%',
+          once: true,
+          toggleActions: 'play none none none',
+        },
+        y: 30,
+        opacity: 0,
         duration: 0.8,
+        delay: 0.3,
         ease: 'power3.out',
       });
     }, sectionRef);
@@ -954,21 +1052,16 @@ function TestimonialsSection() {
       </div>
 
       <div className="container mx-auto max-w-7xl relative">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-5xl font-bold text-gray-900 mb-4">
+        <div className="text-center mb-16">
+          <h2 className="testimonials-title text-5xl font-bold text-gray-900 mb-4">
             Khách Hàng Nói Gì
           </h2>
-          <p className="text-xl text-gray-600">
+          <p className="testimonials-subtitle text-xl text-gray-600">
             Phản hồi chân thực từ những gia đình đã tin tưởng Ecomate
           </p>
-        </motion.div>
+        </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-8" style={{ perspective: '2000px' }}>
           {testimonials.map((testimonial, index) => (
             <TestimonialCard key={index} testimonial={testimonial} index={index} />
           ))}
@@ -1052,7 +1145,20 @@ function FinalCTASection({ onSubmit, email, setEmail }: any) {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Zoom and fade effect for background
+      // Progressive image reveal with clip-path
+      gsap.from('.cta-bg', {
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 80%',
+          once: true,
+          toggleActions: 'play none none none',
+        },
+        clipPath: 'circle(0% at 50% 50%)',
+        duration: 1.5,
+        ease: 'power4.out',
+      });
+
+      // Zoom effect on scroll
       gsap.to('.cta-bg', {
         scrollTrigger: {
           trigger: sectionRef.current,
@@ -1063,15 +1169,48 @@ function FinalCTASection({ onSubmit, email, setEmail }: any) {
         scale: 1.15,
       });
 
-      // Pulse animation for CTA box
+      // Dramatic bounce reveal for CTA box
       gsap.from('.cta-box', {
         scrollTrigger: {
           trigger: '.cta-box',
           start: 'top 80%',
+          once: true,
+          toggleActions: 'play none none none',
         },
-        scale: 0.9,
+        scale: 0.3,
+        rotation: -10,
         opacity: 0,
+        duration: 1.5,
+        ease: 'elastic.out(1, 0.5)',
+      });
+
+      // CTA title with split reveal
+      gsap.from('.cta-title', {
+        scrollTrigger: {
+          trigger: '.cta-title',
+          start: 'top 85%',
+          once: true,
+          toggleActions: 'play none none none',
+        },
+        y: 60,
+        opacity: 0,
+        scale: 0.8,
         duration: 1,
+        ease: 'back.out(1.7)',
+      });
+
+      // CTA description fade in
+      gsap.from('.cta-description', {
+        scrollTrigger: {
+          trigger: '.cta-description',
+          start: 'top 85%',
+          once: true,
+          toggleActions: 'play none none none',
+        },
+        y: 30,
+        opacity: 0,
+        duration: 0.8,
+        delay: 0.3,
         ease: 'power3.out',
       });
     }, sectionRef);
@@ -1164,25 +1303,13 @@ function FinalCTASection({ onSubmit, email, setEmail }: any) {
           <div className="absolute inset-0 bg-white/10 backdrop-blur-xl rounded-[32px] border border-white/20" />
 
           <div className="relative z-10">
-            <motion.h2
-              className="text-5xl font-bold mb-6"
-              initial={{ y: 20, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-            >
+            <h2 className="cta-title text-5xl font-bold mb-6">
               Sẵn Sàng Nâng Cấp Ngôi Nhà?
-            </motion.h2>
-            <motion.p
-              className="text-xl mb-10 opacity-90 max-w-2xl mx-auto"
-              initial={{ y: 20, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-            >
+            </h2>
+            <p className="cta-description text-xl mb-10 opacity-90 max-w-2xl mx-auto">
               Khám phá 5,000+ sản phẩm tiện ích tại Shopee Store.
               Mua sắm dễ dàng, giao hàng nhanh chóng ngay hôm nay!
-            </motion.p>
+            </p>
 
             <FinalMagneticCTA onSubmit={onSubmit} email={email} setEmail={setEmail} />
           </div>
