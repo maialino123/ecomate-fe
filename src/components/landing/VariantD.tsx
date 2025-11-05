@@ -80,12 +80,12 @@ function useMagneticEffect(ref: React.RefObject<HTMLElement | null>, strength = 
   return { x: springX, y: springY };
 }
 
-// High-quality Unsplash images for Ecomate smart home theme
+// High-quality Unsplash images for Ecomate smart home theme - Curated for cohesion
 const IMAGES = {
-  hero: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=3540&auto=format&fit=crop', // Bright modern living room
-  heroOverlay: 'https://images.unsplash.com/photo-1585412727339-54e4bae3bbf9?q=80&w=3540&auto=format&fit=crop', // Smart home tablet
-  heroLayer2: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=3540&auto=format&fit=crop', // Modern home interior
-  heroLayer3: 'https://images.unsplash.com/photo-1600210492493-0946911123ea?q=80&w=3540&auto=format&fit=crop', // Cozy living space
+  hero: 'https://images.unsplash.com/photo-1600210492493-0946911123ea?q=80&w=3840&auto=format&fit=crop', // Modern cozy living room with warm tones
+  heroOverlay: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?q=80&w=3840&auto=format&fit=crop', // Smart home control panel
+  heroLayer2: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=3840&auto=format&fit=crop', // Elegant home interior
+  heroLayer3: 'https://images.unsplash.com/photo-1600607687644-aac4c3eac7f4?q=80&w=3840&auto=format&fit=crop', // Warm family space
   feature1: 'https://images.unsplash.com/photo-1556909212-d5b604d0c90d?q=80&w=3540&auto=format&fit=crop', // Modern kitchen interior
   feature2: 'https://images.unsplash.com/photo-1617104678098-ab8e2a3e8c66?q=80&w=3540&auto=format&fit=crop', // Bedroom with warm lighting
   impact: 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=3540&auto=format&fit=crop', // Modern family home
@@ -365,16 +365,14 @@ export default function VariantD({ variant }: VariantProps) {
           />
         </div>
 
-        {/* 3D Layered Background Images with Depth */}
-        <div className="absolute inset-0 z-0" style={{ transformStyle: 'preserve-3d' }}>
-          {/* Layer 1 - Base */}
+        {/* 3D Layered Background Images - SMOOTH scroll-only parallax (NO mouse reactive) */}
+        <div className="absolute inset-0 z-0">
+          {/* Layer 1 - Base with smooth scroll parallax only */}
           <motion.div
             className="hero-layer-1 hero-layer-float absolute inset-0"
             style={{
               y,
               opacity,
-              x: heroParallaxX,
-              transform: 'translateZ(-100px)',
             }}
           >
             <Image
@@ -385,16 +383,14 @@ export default function VariantD({ variant }: VariantProps) {
               className="object-cover"
               style={{ objectPosition: 'center center' }}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-amber-900/50 via-orange-900/30 to-slate-900/70" />
+            <div className="absolute inset-0 bg-gradient-to-b from-amber-900/60 via-orange-900/40 to-slate-900/75" />
           </motion.div>
 
-          {/* Layer 2 - Mid depth with parallax */}
+          {/* Layer 2 - Mid depth with gentle scroll parallax */}
           <motion.div
-            className="hero-layer-2 absolute left-0 top-0 w-1/2 h-full opacity-40"
+            className="hero-layer-2 absolute left-0 top-0 w-2/5 h-full opacity-20"
             style={{
-              y: useTransform(scrollYProgress, [0, 1], ['0%', '20%']),
-              x: useTransform(mouseX, [0, typeof window !== 'undefined' ? window.innerWidth : 1920], [-30, 30]),
-              transform: 'translateZ(-50px)',
+              y: useTransform(scrollYProgress, [0, 1], ['0%', '15%']),
             }}
           >
             <Image
@@ -405,13 +401,11 @@ export default function VariantD({ variant }: VariantProps) {
             />
           </motion.div>
 
-          {/* Layer 3 - Front depth */}
+          {/* Layer 3 - Front depth with subtle scroll parallax */}
           <motion.div
-            className="hero-layer-3 absolute right-0 top-0 w-1/2 h-full opacity-30"
+            className="hero-layer-3 absolute right-0 top-0 w-2/5 h-full opacity-15"
             style={{
-              y: useTransform(scrollYProgress, [0, 1], ['0%', '15%']),
-              x: useTransform(mouseX, [0, typeof window !== 'undefined' ? window.innerWidth : 1920], [30, -30]),
-              transform: 'translateZ(0px)',
+              y: useTransform(scrollYProgress, [0, 1], ['0%', '10%']),
             }}
           >
             <Image
@@ -426,73 +420,174 @@ export default function VariantD({ variant }: VariantProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-primary-50/95 via-slate-900/40 to-transparent" />
         </div>
 
-        {/* Premium Aura Particle System */}
+        {/* Optimized Aura Particle System - Reduced for performance */}
         <div className="absolute inset-0 z-10 pointer-events-none">
-          {[...Array(30)].map((_, i) => (
+          {[...Array(12)].map((_, i) => (
             <motion.div
               key={i}
               className="aura-particle absolute rounded-full"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
-                width: `${8 + Math.random() * 16}px`,
-                height: `${8 + Math.random() * 16}px`,
-                background: `radial-gradient(circle, rgba(251, 191, 36, ${0.6 + Math.random() * 0.4}) 0%, rgba(245, 158, 11, ${0.3 + Math.random() * 0.3}) 40%, transparent 70%)`,
-                filter: `blur(${2 + Math.random() * 4}px)`,
+                width: `${10 + Math.random() * 14}px`,
+                height: `${10 + Math.random() * 14}px`,
+                background: `radial-gradient(circle, rgba(251, 191, 36, ${0.5 + Math.random() * 0.3}) 0%, rgba(245, 158, 11, ${0.25 + Math.random() * 0.25}) 40%, transparent 70%)`,
+                filter: `blur(${3 + Math.random() * 3}px)`,
               }}
               animate={{
-                y: [0, -30 - Math.random() * 40, 0],
-                x: [0, (Math.random() - 0.5) * 30, 0],
-                opacity: [0.3, 0.8, 0.3],
-                scale: [1, 1.3, 1],
+                y: [0, -25 - Math.random() * 35, 0],
+                x: [0, (Math.random() - 0.5) * 20, 0],
+                opacity: [0.2, 0.6, 0.2],
+                scale: [1, 1.2, 1],
               }}
               transition={{
-                duration: 4 + Math.random() * 6,
+                duration: 5 + Math.random() * 5,
                 repeat: Infinity,
-                delay: Math.random() * 3,
+                delay: Math.random() * 4,
                 ease: 'easeInOut',
               }}
             />
           ))}
         </div>
 
-        {/* Aura Glow Effects around content */}
+        {/* Artistic Geometric Pattern Animations */}
+        <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
+          {/* Rotating hexagons */}
+          {[...Array(6)].map((_, i) => (
+            <motion.div
+              key={`hex-${i}`}
+              className="absolute"
+              style={{
+                left: `${15 + i * 15}%`,
+                top: `${20 + (i % 3) * 25}%`,
+                width: '60px',
+                height: '60px',
+              }}
+              animate={{
+                rotate: [0, 360],
+                opacity: [0.05, 0.15, 0.05],
+              }}
+              transition={{
+                rotate: {
+                  duration: 20 + i * 3,
+                  repeat: Infinity,
+                  ease: 'linear',
+                },
+                opacity: {
+                  duration: 6 + i,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                },
+              }}
+            >
+              <svg viewBox="0 0 100 100" className="w-full h-full">
+                <polygon
+                  points="50 5, 95 27.5, 95 72.5, 50 95, 5 72.5, 5 27.5"
+                  fill="none"
+                  stroke="rgba(251, 191, 36, 0.3)"
+                  strokeWidth="2"
+                />
+              </svg>
+            </motion.div>
+          ))}
+
+          {/* Floating circles with scale */}
+          {[...Array(4)].map((_, i) => (
+            <motion.div
+              key={`circle-${i}`}
+              className="absolute rounded-full border-2"
+              style={{
+                right: `${10 + i * 20}%`,
+                top: `${15 + i * 20}%`,
+                width: '80px',
+                height: '80px',
+                borderColor: 'rgba(245, 158, 11, 0.2)',
+              }}
+              animate={{
+                scale: [1, 1.3, 1],
+                opacity: [0.1, 0.25, 0.1],
+                rotate: [0, 180, 0],
+              }}
+              transition={{
+                duration: 8 + i * 2,
+                repeat: Infinity,
+                ease: 'easeInOut',
+                delay: i * 1.5,
+              }}
+            />
+          ))}
+
+          {/* Wave lines */}
+          {[...Array(3)].map((_, i) => (
+            <motion.div
+              key={`wave-${i}`}
+              className="absolute left-0 right-0"
+              style={{
+                top: `${30 + i * 25}%`,
+                height: '2px',
+                background: 'linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.2), transparent)',
+              }}
+              animate={{
+                x: ['-100%', '100%'],
+                opacity: [0, 0.3, 0],
+              }}
+              transition={{
+                duration: 10 + i * 2,
+                repeat: Infinity,
+                ease: 'linear',
+                delay: i * 3,
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Smooth Ambient Aura Glow - Reduced blur for performance */}
         <div className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center">
           <motion.div
-            className="aura-glow w-[800px] h-[800px] rounded-full opacity-30"
+            className="aura-glow w-[700px] h-[700px] rounded-full opacity-25"
             style={{
-              background: 'radial-gradient(circle, rgba(251, 191, 36, 0.4) 0%, rgba(245, 158, 11, 0.2) 30%, transparent 60%)',
-              filter: 'blur(60px)',
+              background: 'radial-gradient(circle, rgba(251, 191, 36, 0.35) 0%, rgba(245, 158, 11, 0.18) 35%, transparent 65%)',
+              filter: 'blur(50px)',
+            }}
+            animate={{
+              scale: [1, 1.15, 1],
+              opacity: [0.2, 0.3, 0.2],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: 'easeInOut',
             }}
           />
         </div>
 
-        {/* Light Rays Effect */}
+        {/* Subtle Light Rays - Reduced for smooth performance */}
         <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
-          {[...Array(5)].map((_, i) => (
+          {[...Array(4)].map((_, i) => (
             <motion.div
               key={i}
-              className="light-ray absolute h-full opacity-10"
+              className="light-ray absolute h-full"
               style={{
-                left: `${20 + i * 15}%`,
-                width: '2px',
-                background: 'linear-gradient(to bottom, transparent, rgba(251, 191, 36, 0.8), transparent)',
+                left: `${25 + i * 18}%`,
+                width: '1px',
+                background: 'linear-gradient(to bottom, transparent 0%, rgba(251, 191, 36, 0.4) 50%, transparent 100%)',
                 transformOrigin: 'top',
               }}
               animate={{
-                scaleY: [1, 1.2, 1],
-                opacity: [0.05, 0.15, 0.05],
+                scaleY: [1, 1.15, 1],
+                opacity: [0.03, 0.1, 0.03],
               }}
               transition={{
-                duration: 3 + i,
+                duration: 4 + i * 1.5,
                 repeat: Infinity,
-                delay: i * 0.5,
+                delay: i * 0.8,
                 ease: 'easeInOut',
               }}
             />
           ))}
         </div>
 
+        {/* Content container - NO mouse parallax for smooth experience */}
         <div className="container mx-auto px-4 relative z-20">
           <div className="max-w-6xl mx-auto">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
