@@ -10,6 +10,7 @@ Good news: **You DON'T need monorepo!** Your current architecture already suppor
    - Auto-detects subdomains
    - Routes to correct variant
    - Works locally and in production
+   - **Note**: Using `middleware.ts` (not `proxy.ts`) for Vercel compatibility
 
 2. ✅ **Landing Pages Exist**: `/src/app/landing/[variant]/page.tsx`
    - Variant A, B, C, D already created
