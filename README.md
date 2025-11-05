@@ -1,2 +1,170 @@
-# ecomate-fe
-Project FE
+# EcoMate Frontend
+
+Landing pages với A/B Testing được xây dựng với Next.js 14+ (App Router)
+
+## 🚀 Features
+
+- ✅ **Next.js 14+** với App Router
+- ✅ **TypeScript** cho type safety
+- ✅ **Tailwind CSS** cho styling
+- ✅ **A/B Testing** với middleware
+- ✅ **3 Landing Page Variants**:
+  - **Variant A**: Professional & Trust-focused (stats, credibility)
+  - **Variant B**: Emotional & Impact-focused (urgency, stories)
+  - **Variant C**: Simple & Action-focused (minimalist, clear CTA)
+- ✅ **Analytics Tracking** system
+- ✅ **Cookie-based** user assignment
+- ✅ **Edge Middleware** cho performance
+
+## 📁 Cấu trúc Project
+
+```
+ecomate-fe/
+├── src/
+│   ├── app/
+│   │   ├── landing/
+│   │   │   └── [variant]/
+│   │   │       └── page.tsx       # Dynamic variant page
+│   │   ├── api/
+│   │   │   └── analytics/
+│   │   │       └── route.ts       # Analytics API endpoint
+│   │   ├── layout.tsx             # Root layout
+│   │   ├── page.tsx               # Home (redirects to /landing)
+│   │   └── globals.css            # Global styles + Tailwind
+│   ├── components/
+│   │   └── landing/
+│   │       ├── VariantA.tsx       # Variant A component
+│   │       ├── VariantB.tsx       # Variant B component
+│   │       └── VariantC.tsx       # Variant C component
+│   └── lib/
+│       ├── ab-testing/
+│       │   └── index.ts           # A/B testing logic
+│       └── analytics/
+│           └── index.ts           # Analytics utilities
+├── middleware.ts                   # Edge middleware for A/B routing
+├── tailwind.config.ts
+├── tsconfig.json
+└── package.json
+```
+
+## 🎯 A/B Testing Flow
+
+1. **User visits `/`** → Redirects to `/landing`
+2. **Middleware checks cookie** `ab_variant`
+   - If exists → Route to assigned variant
+   - If not → Assign variant based on weights (A:34%, B:33%, C:33%)
+3. **User sees variant** → Variant A, B, or C
+4. **Conversion tracked** → Analytics API logs events
+
+## 🛠️ Setup & Development
+
+### Install dependencies
+```bash
+npm install
+```
+
+### Run development server
+```bash
+npm run dev
+```
+
+Mở [http://localhost:3000](http://localhost:3000)
+
+### Build for production
+```bash
+npm run build
+npm start
+```
+
+## 🧪 Testing Variants
+
+### Xem variant cụ thể:
+- Variant A: `http://localhost:3000/landing/A`
+- Variant B: `http://localhost:3000/landing/B`
+- Variant C: `http://localhost:3000/landing/C`
+
+### Test A/B routing:
+1. Mở `http://localhost:3000/` trong incognito mode
+2. Check console log để xem variant được assign
+3. Xóa cookies và reload để được assign variant mới
+4. Check cookie `ab_variant` trong DevTools
+
+## 📊 Analytics
+
+### Track events:
+```typescript
+import { trackEvent, trackConversion } from '@/lib/analytics';
+
+// Track conversion
+trackConversion('A', 'user@example.com');
+
+// Track custom event
+trackEvent('cta_click', { variant: 'B', location: 'hero' });
+```
+
+### API endpoint:
+- POST `/api/analytics` - Receive analytics events
+
+## ⚙️ Configuration
+
+### Thay đổi variant weights:
+Edit `src/lib/ab-testing/index.ts`:
+```typescript
+export const DEFAULT_AB_CONFIG: ABTestConfig = {
+  variants: ['A', 'B', 'C'],
+  weights: {
+    A: 50,  // 50%
+    B: 30,  // 30%
+    C: 20,  // 20%
+  },
+};
+```
+
+### Thêm variant mới:
+1. Tạo `src/components/landing/VariantD.tsx`
+2. Update `src/app/landing/[variant]/page.tsx`
+3. Update `src/lib/ab-testing/index.ts` với variant 'D'
+
+## 🎨 Variant Differences
+
+| Feature | Variant A | Variant B | Variant C |
+|---------|-----------|-----------|-----------|
+| **Theme** | Professional | Emotional | Minimalist |
+| **Colors** | Green/Blue pastel | Dark green gradient | Clean white |
+| **Messaging** | Trust & Stats | Urgency & Impact | Simple & Direct |
+| **CTA** | "Get Started" | "Join the Movement" | "Start Free Today" |
+| **Social Proof** | Numbers & ratings | Testimonials & stories | Company logos |
+
+## 📈 Next Steps
+
+- [ ] Integrate Google Analytics 4
+- [ ] Connect to database for analytics
+- [ ] Add more landing page variants
+- [ ] Implement email capture backend
+- [ ] Add loading states
+- [ ] Implement error boundaries
+- [ ] Add SEO metadata per variant
+- [ ] Setup Vercel Edge Config
+- [ ] Add conversion funnel tracking
+- [ ] Implement heatmap tracking
+
+## 🚢 Deployment
+
+### Vercel (Recommended)
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy
+vercel
+```
+
+### Other platforms
+Build and deploy the `.next` folder:
+```bash
+npm run build
+```
+
+## 📝 License
+
+ISC
