@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import type { Variant } from '@/lib/ab-testing';
 import { Button, Input } from '@/components/ui';
+import { Header, Footer } from '@/components/common';
 
 interface VariantProps {
   variant: Variant;
@@ -24,8 +25,10 @@ export default function VariantC({ variant }: VariantProps) {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section - Minimal */}
+    <>
+      <Header />
+      <div className="min-h-screen bg-white">
+        {/* Hero Section - Minimal */}
       <div className="container mx-auto px-4 py-24">
         <div className="max-w-3xl mx-auto">
           {/* Simple Logo */}
@@ -155,5 +158,7 @@ export default function VariantC({ variant }: VariantProps) {
         </div>
       </div>
     </div>
+    <Footer />
+    </>
   );
 }
