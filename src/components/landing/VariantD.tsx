@@ -343,7 +343,7 @@ export default function VariantD({ variant }: VariantProps) {
       </div>
 
       {/* Hero Section - 3D Premium Animation */}
-      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{ perspective: '2000px' }}>
+      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden py-20 md:py-0" style={{ perspective: '2000px' }}>
         {/* Morphing Gradient Background - Animated */}
         <div className="hero-morph-bg absolute inset-0 z-0">
           <motion.div
@@ -383,12 +383,12 @@ export default function VariantD({ variant }: VariantProps) {
               className="object-cover"
               style={{ objectPosition: 'center center' }}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-amber-900/60 via-orange-900/40 to-slate-900/75" />
+            <div className="absolute inset-0 bg-gradient-to-b from-amber-900/70 via-orange-900/50 to-slate-900/80 md:from-amber-900/60 md:via-orange-900/40 md:to-slate-900/75" />
           </motion.div>
 
-          {/* Layer 2 - Mid depth with gentle scroll parallax */}
+          {/* Layer 2 - Mid depth - Hidden on mobile for performance */}
           <motion.div
-            className="hero-layer-2 absolute left-0 top-0 w-2/5 h-full opacity-20"
+            className="hero-layer-2 absolute left-0 top-0 w-2/5 h-full opacity-0 md:opacity-20"
             style={{
               y: useTransform(scrollYProgress, [0, 1], ['0%', '15%']),
             }}
@@ -401,9 +401,9 @@ export default function VariantD({ variant }: VariantProps) {
             />
           </motion.div>
 
-          {/* Layer 3 - Front depth with subtle scroll parallax */}
+          {/* Layer 3 - Front depth - Hidden on mobile for performance */}
           <motion.div
-            className="hero-layer-3 absolute right-0 top-0 w-2/5 h-full opacity-15"
+            className="hero-layer-3 absolute right-0 top-0 w-2/5 h-full opacity-0 md:opacity-15"
             style={{
               y: useTransform(scrollYProgress, [0, 1], ['0%', '10%']),
             }}
@@ -417,15 +417,15 @@ export default function VariantD({ variant }: VariantProps) {
           </motion.div>
 
           {/* Final gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-primary-50/95 via-slate-900/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-primary-50/98 via-slate-900/50 to-transparent md:from-primary-50/95 md:via-slate-900/40" />
         </div>
 
-        {/* Optimized Aura Particle System - Reduced for performance */}
+        {/* Optimized Aura Particle System - Reduced count on mobile */}
         <div className="absolute inset-0 z-10 pointer-events-none">
-          {[...Array(12)].map((_, i) => (
+          {[...Array(6)].map((_, i) => (
             <motion.div
               key={i}
-              className="aura-particle absolute rounded-full"
+              className="aura-particle absolute rounded-full hidden md:block"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
@@ -448,17 +448,43 @@ export default function VariantD({ variant }: VariantProps) {
               }}
             />
           ))}
+          {/* Mobile: Only 3 particles */}
+          {[...Array(3)].map((_, i) => (
+            <motion.div
+              key={`mobile-${i}`}
+              className="aura-particle absolute rounded-full md:hidden"
+              style={{
+                left: `${20 + i * 30}%`,
+                top: `${30 + i * 20}%`,
+                width: '12px',
+                height: '12px',
+                background: `radial-gradient(circle, rgba(251, 191, 36, 0.5) 0%, rgba(245, 158, 11, 0.25) 40%, transparent 70%)`,
+                filter: 'blur(3px)',
+              }}
+              animate={{
+                y: [0, -20, 0],
+                opacity: [0.2, 0.5, 0.2],
+                scale: [1, 1.15, 1],
+              }}
+              transition={{
+                duration: 6 + i * 2,
+                repeat: Infinity,
+                delay: i * 1.5,
+                ease: 'easeInOut',
+              }}
+            />
+          ))}
         </div>
 
-        {/* Artistic Geometric Pattern Animations */}
+        {/* Artistic Geometric Pattern Animations - Simplified on mobile */}
         <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
-          {/* Rotating hexagons */}
-          {[...Array(6)].map((_, i) => (
+          {/* Rotating hexagons - Desktop only */}
+          {[...Array(4)].map((_, i) => (
             <motion.div
               key={`hex-${i}`}
-              className="absolute"
+              className="absolute hidden md:block"
               style={{
-                left: `${15 + i * 15}%`,
+                left: `${15 + i * 20}%`,
                 top: `${20 + (i % 3) * 25}%`,
                 width: '60px',
                 height: '60px',
@@ -491,14 +517,14 @@ export default function VariantD({ variant }: VariantProps) {
             </motion.div>
           ))}
 
-          {/* Floating circles with scale */}
-          {[...Array(4)].map((_, i) => (
+          {/* Floating circles - Reduced on mobile */}
+          {[...Array(2)].map((_, i) => (
             <motion.div
               key={`circle-${i}`}
-              className="absolute rounded-full border-2"
+              className="absolute rounded-full border-2 hidden md:block"
               style={{
-                right: `${10 + i * 20}%`,
-                top: `${15 + i * 20}%`,
+                right: `${15 + i * 30}%`,
+                top: `${20 + i * 30}%`,
                 width: '80px',
                 height: '80px',
                 borderColor: 'rgba(245, 158, 11, 0.2)',
@@ -517,14 +543,39 @@ export default function VariantD({ variant }: VariantProps) {
             />
           ))}
 
-          {/* Wave lines */}
-          {[...Array(3)].map((_, i) => (
+          {/* Mobile: Simplified circles */}
+          {[...Array(2)].map((_, i) => (
+            <motion.div
+              key={`circle-mobile-${i}`}
+              className="absolute rounded-full border md:hidden"
+              style={{
+                right: `${20 + i * 50}%`,
+                top: `${25 + i * 40}%`,
+                width: '50px',
+                height: '50px',
+                borderColor: 'rgba(245, 158, 11, 0.15)',
+              }}
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.08, 0.18, 0.08],
+              }}
+              transition={{
+                duration: 8 + i * 2,
+                repeat: Infinity,
+                ease: 'easeInOut',
+                delay: i * 2,
+              }}
+            />
+          ))}
+
+          {/* Wave lines - Reduced on mobile */}
+          {[...Array(2)].map((_, i) => (
             <motion.div
               key={`wave-${i}`}
               className="absolute left-0 right-0"
               style={{
-                top: `${30 + i * 25}%`,
-                height: '2px',
+                top: `${35 + i * 35}%`,
+                height: '1px',
                 background: 'linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.2), transparent)',
               }}
               animate={{
@@ -535,23 +586,23 @@ export default function VariantD({ variant }: VariantProps) {
                 duration: 10 + i * 2,
                 repeat: Infinity,
                 ease: 'linear',
-                delay: i * 3,
+                delay: i * 4,
               }}
             />
           ))}
         </div>
 
-        {/* Smooth Ambient Aura Glow - Reduced blur for performance */}
+        {/* Smooth Ambient Aura Glow - Optimized for mobile */}
         <div className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center">
           <motion.div
-            className="aura-glow w-[700px] h-[700px] rounded-full opacity-25"
+            className="aura-glow w-[400px] h-[400px] md:w-[700px] md:h-[700px] rounded-full opacity-20 md:opacity-25"
             style={{
               background: 'radial-gradient(circle, rgba(251, 191, 36, 0.35) 0%, rgba(245, 158, 11, 0.18) 35%, transparent 65%)',
-              filter: 'blur(50px)',
+              filter: 'blur(40px)',
             }}
             animate={{
               scale: [1, 1.15, 1],
-              opacity: [0.2, 0.3, 0.2],
+              opacity: [0.15, 0.25, 0.15],
             }}
             transition={{
               duration: 8,
@@ -587,29 +638,29 @@ export default function VariantD({ variant }: VariantProps) {
           ))}
         </div>
 
-        {/* Content container - NO mouse parallax for smooth experience */}
-        <div className="container mx-auto px-4 relative z-20">
+        {/* Content container - Mobile optimized spacing */}
+        <div className="container mx-auto px-4 sm:px-6 relative z-20">
           <div className="max-w-6xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
               {/* Left: Content */}
               <div className="text-center lg:text-left">
-                {/* Trust Badge with glass morphism */}
+                {/* Trust Badge - Mobile optimized */}
                 <motion.div
-                  className="hero-badge inline-flex items-center gap-2 bg-white/10 backdrop-blur-xl px-6 py-3 rounded-full shadow-2xl mb-8 border border-white/20"
+                  className="hero-badge inline-flex items-center gap-2 bg-white/10 backdrop-blur-xl px-4 py-2 md:px-6 md:py-3 rounded-full shadow-2xl mb-6 md:mb-8 border border-white/20 text-xs md:text-sm"
                   whileHover={{ scale: 1.05, backgroundColor: 'rgba(255, 255, 255, 0.15)' }}
                   style={{
                     boxShadow: '0 8px 32px rgba(251, 191, 36, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
                   }}
                 >
-                  <span className="w-3 h-3 bg-amber-400 rounded-full animate-pulse" />
-                  <span className="text-sm font-bold text-white">
+                  <span className="w-2 h-2 md:w-3 md:h-3 bg-amber-400 rounded-full animate-pulse" />
+                  <span className="font-bold text-white">
                     Được tin cậy bởi <span className="text-amber-300">15,000+</span> gia đình Việt
                   </span>
                 </motion.div>
 
-                {/* Hero Title with 3D split text - each word animated */}
-                <div className="mb-6" style={{ perspective: '1000px' }}>
-                  <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
+                {/* Hero Title - Mobile optimized typography */}
+                <div className="mb-4 md:mb-6" style={{ perspective: '1000px' }}>
+                  <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight">
                     <div className="hero-title-word inline-block mr-3" style={{
                       color: '#ffffff',
                       textShadow: '0 4px 20px rgba(0,0,0,0.5), 0 8px 40px rgba(0,0,0,0.3), 0 0 60px rgba(251, 191, 36, 0.3)',
@@ -682,9 +733,9 @@ export default function VariantD({ variant }: VariantProps) {
                   </h1>
                 </div>
 
-                {/* Hero Subtitle with glass background */}
+                {/* Hero Subtitle - Mobile optimized */}
                 <p
-                  className="hero-subtitle text-lg md:text-xl mb-10 leading-relaxed font-medium"
+                  className="hero-subtitle text-base sm:text-lg md:text-xl mb-6 md:mb-10 leading-relaxed font-medium px-2 sm:px-0"
                   style={{
                     color: '#fef3c7',
                     textShadow: '0 2px 8px rgba(0,0,0,0.6), 0 1px 4px rgba(0,0,0,0.5)',
@@ -708,13 +759,13 @@ export default function VariantD({ variant }: VariantProps) {
                 <MagneticCTA onSubmit={handleSubmit} email={email} setEmail={setEmail} />
 
                 {/* Social Proof Stats */}
-                <div className="mt-12">
+                <div className="mt-8 md:mt-12">
                   <AnimatedStats />
                 </div>
               </div>
 
-              {/* Right: 3D Floating Feature Cards */}
-              <div className="relative h-[500px] lg:h-[600px]" style={{ perspective: '1500px', transformStyle: 'preserve-3d' }}>
+              {/* Right: 3D Floating Feature Cards - Hidden on mobile for performance */}
+              <div className="relative h-[400px] lg:h-[600px] hidden lg:block" style={{ perspective: '1500px', transformStyle: 'preserve-3d' }}>
                 {FLOATING_FEATURES.map((feature, index) => (
                   <FloatingCard3D
                     key={index}
@@ -725,13 +776,31 @@ export default function VariantD({ variant }: VariantProps) {
                   />
                 ))}
               </div>
+
+              {/* Mobile: Simple Feature Grid instead of floating cards */}
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:hidden mt-8">
+                {FLOATING_FEATURES.map((feature, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                    className={`bg-gradient-to-br ${feature.color} rounded-2xl p-4 sm:p-5 text-white text-center shadow-lg`}
+                  >
+                    <div className="text-3xl sm:text-4xl mb-2">{feature.icon}</div>
+                    <h3 className="text-sm sm:text-base font-bold mb-1">{feature.title}</h3>
+                    <p className="text-xs sm:text-sm opacity-90">{feature.desc}</p>
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Scroll Indicator */}
+        {/* Scroll Indicator - Hidden on mobile */}
         <motion.div
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 hidden md:block"
           animate={{ y: [0, 10, 0] }}
           transition={{ repeat: Infinity, duration: 1.5 }}
         >
@@ -765,7 +834,7 @@ export default function VariantD({ variant }: VariantProps) {
   );
 }
 
-// Magnetic CTA Component with Ripple Effect
+// Magnetic CTA Component - Mobile optimized (no magnetic effect on mobile)
 function MagneticCTA({ onSubmit, email, setEmail }: any) {
   const buttonRef = useRef<HTMLDivElement>(null);
   const { x, y } = useMagneticEffect(buttonRef, 0.4);
@@ -784,11 +853,11 @@ function MagneticCTA({ onSubmit, email, setEmail }: any) {
   return (
     <motion.form
       onSubmit={onSubmit}
-      className="hero-cta max-w-2xl mx-auto mb-12"
+      className="hero-cta max-w-2xl mx-auto mb-8 md:mb-12 px-2 sm:px-0"
       whileHover={{ scale: 1.02 }}
       transition={{ type: 'spring', stiffness: 300 }}
     >
-      <div className="flex flex-col sm:flex-row gap-3 bg-white/95 backdrop-blur-md p-2 rounded-2xl shadow-2xl border border-primary-100/50">
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 bg-white/95 backdrop-blur-md p-2 rounded-xl sm:rounded-2xl shadow-2xl border border-primary-100/50">
         <Input
           type="email"
           value={email}
@@ -796,11 +865,11 @@ function MagneticCTA({ onSubmit, email, setEmail }: any) {
           placeholder="Nhập email nhận ưu đãi 20%"
           required
           inputSize="lg"
-          className="flex-1 border-0 focus:ring-2 focus:ring-amber-400 transition-all"
+          className="flex-1 border-0 focus:ring-2 focus:ring-amber-400 transition-all text-sm sm:text-base"
         />
         <motion.div
           ref={buttonRef}
-          style={{ x, y }}
+          style={{ x: typeof window !== 'undefined' && window.innerWidth >= 768 ? x : 0, y: typeof window !== 'undefined' && window.innerWidth >= 768 ? y : 0 }}
           className="relative"
           onClick={handleClick}
         >
@@ -822,7 +891,7 @@ function MagneticCTA({ onSubmit, email, setEmail }: any) {
             type="submit"
             variant="primary"
             size="lg"
-            className="px-8 whitespace-nowrap shadow-lg hover:shadow-2xl transition-all relative overflow-hidden group"
+            className="w-full sm:w-auto px-6 sm:px-8 whitespace-nowrap shadow-lg hover:shadow-2xl transition-all relative overflow-hidden group text-sm sm:text-base"
           >
             <span className="relative z-10">Khám Phá Ngay →</span>
             <motion.div
@@ -834,14 +903,14 @@ function MagneticCTA({ onSubmit, email, setEmail }: any) {
           </Button>
         </motion.div>
       </div>
-      <p className="text-sm mt-3 font-medium" style={{ color: '#e5e7eb', textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>
-        🎁 Giảm 20% đơn đầu • 🚚 Freeship toàn quốc • ⭐ Hỗ trợ 24/7
+      <p className="text-xs sm:text-sm mt-2 sm:mt-3 font-medium text-center" style={{ color: '#e5e7eb', textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>
+        🎁 Giảm 20% đơn đầu • 🚚 Freeship • ⭐ Hỗ trợ 24/7
       </p>
     </motion.form>
   );
 }
 
-// Animated Stats Component with Count-Up
+// Animated Stats Component with Count-Up - Mobile optimized
 function AnimatedStats() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
@@ -853,7 +922,7 @@ function AnimatedStats() {
   ];
 
   return (
-    <div ref={ref} className="grid grid-cols-3 gap-6 max-w-3xl mx-auto">
+    <div ref={ref} className="grid grid-cols-3 gap-3 sm:gap-4 md:gap-6 max-w-3xl mx-auto">
       {stats.map((stat, index) => (
         <motion.div
           key={index}
@@ -862,10 +931,10 @@ function AnimatedStats() {
           transition={{ delay: index * 0.2, type: 'spring', stiffness: 100 }}
           className="text-center"
         >
-          <div className="text-4xl font-bold text-amber-600">
+          <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-amber-600">
             <CountUp end={stat.value} suffix={stat.suffix} />
           </div>
-          <div className="text-sm text-slate-700 mt-1">{stat.label}</div>
+          <div className="text-xs sm:text-sm text-slate-700 mt-1">{stat.label}</div>
         </motion.div>
       ))}
     </div>
