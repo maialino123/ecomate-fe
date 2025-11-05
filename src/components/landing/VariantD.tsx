@@ -83,6 +83,23 @@ function useMemoizedMobileParticles() {
   }, []); // Static data
 }
 
+// Custom hook for responsive media query - true conditional rendering
+function useMediaQuery(query: string): boolean {
+  const [matches, setMatches] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    if (media.matches !== matches) {
+      setMatches(media.matches);
+    }
+    const listener = () => setMatches(media.matches);
+    media.addEventListener('change', listener);
+    return () => media.removeEventListener('change', listener);
+  }, [matches, query]);
+
+  return matches;
+}
+
 // Custom hook for mouse position tracking
 function useMousePosition() {
   const x = useMotionValue(0);
@@ -191,7 +208,11 @@ export default function VariantD({ variant }: VariantProps) {
   const heroRef = useRef<HTMLDivElement>(null);
   const featuresRef = useRef<HTMLDivElement>(null);
 
-  // Performance: Memoize particles and geometry to prevent recreation on every render
+  // True responsive detection - no double rendering
+  const isDesktop = useMediaQuery('(min-width: 768px)');
+  const isLargeScreen = useMediaQuery('(min-width: 1024px)');
+
+  // Performance: Memoize particles and geometry based on screen size
   const desktopParticles = useMemoizedParticles(6);
   const mobileParticles = useMemoizedMobileParticles();
   const geometry = useMemoizedGeometry();
@@ -496,13 +517,13 @@ export default function VariantD({ variant }: VariantProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-primary-50/98 via-slate-900/50 to-transparent md:from-primary-50/95 md:via-slate-900/40" />
         </div>
 
-        {/* Optimized Aura Particle System - Memoized positions prevent re-renders */}
+        {/* Optimized Aura Particle System - True conditional rendering */}
         <div className="absolute inset-0 z-10 pointer-events-none">
-          {/* Desktop particles - Memoized */}
-          {desktopParticles.map((particle) => (
+          {/* Desktop particles - Only render on desktop */}
+          {isDesktop && desktopParticles.map((particle) => (
             <motion.div
               key={particle.id}
-              className="aura-particle absolute rounded-full hidden md:block"
+              className="aura-particle absolute rounded-full"
               style={{
                 left: `${particle.left}%`,
                 top: `${particle.top}%`,
@@ -525,11 +546,11 @@ export default function VariantD({ variant }: VariantProps) {
               }}
             />
           ))}
-          {/* Mobile particles - Memoized */}
-          {mobileParticles.map((particle) => (
+          {/* Mobile particles - Only render on mobile */}
+          {!isDesktop && mobileParticles.map((particle) => (
             <motion.div
               key={`mobile-${particle.id}`}
-              className="aura-particle absolute rounded-full md:hidden"
+              className="aura-particle absolute rounded-full"
               style={{
                 left: `${particle.left}%`,
                 top: `${particle.top}%`,
@@ -553,13 +574,13 @@ export default function VariantD({ variant }: VariantProps) {
           ))}
         </div>
 
-        {/* Artistic Geometric Pattern Animations - Memoized geometry */}
+        {/* Artistic Geometric Pattern Animations - True conditional rendering */}
         <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
-          {/* Rotating hexagons - Desktop only - Memoized */}
-          {geometry.hexagons.map((hex) => (
+          {/* Rotating hexagons - Desktop only */}
+          {isDesktop && geometry.hexagons.map((hex) => (
             <motion.div
               key={`hex-${hex.id}`}
-              className="absolute hidden md:block"
+              className="absolute"
               style={{
                 left: `${hex.left}%`,
                 top: `${hex.top}%`,
@@ -594,11 +615,11 @@ export default function VariantD({ variant }: VariantProps) {
             </motion.div>
           ))}
 
-          {/* Floating circles - Desktop - Memoized */}
-          {geometry.circles.map((circle) => (
+          {/* Floating circles - True conditional rendering */}
+          {isDesktop && geometry.circles.map((circle) => (
             <motion.div
               key={`circle-${circle.id}`}
-              className="absolute rounded-full border-2 hidden md:block"
+              className="absolute rounded-full border-2"
               style={{
                 right: `${circle.right}%`,
                 top: `${circle.top}%`,
@@ -620,11 +641,11 @@ export default function VariantD({ variant }: VariantProps) {
             />
           ))}
 
-          {/* Mobile circles - Memoized */}
-          {geometry.mobileCircles.map((circle) => (
+          {/* Mobile circles - Only on mobile */}
+          {!isDesktop && geometry.mobileCircles.map((circle) => (
             <motion.div
               key={`circle-mobile-${circle.id}`}
-              className="absolute rounded-full border md:hidden"
+              className="absolute rounded-full border"
               style={{
                 right: `${circle.right}%`,
                 top: `${circle.top}%`,
@@ -841,54 +862,58 @@ export default function VariantD({ variant }: VariantProps) {
                 </div>
               </div>
 
-              {/* Right: 3D Floating Feature Cards - Hidden on mobile for performance */}
-              <div className="relative h-[400px] lg:h-[600px] hidden lg:block" style={{ perspective: '1500px', transformStyle: 'preserve-3d' }}>
-                {FLOATING_FEATURES.map((feature, index) => (
-                  <FloatingCard3D
-                    key={index}
-                    feature={feature}
-                    index={index}
-                    mouseX={mouseX}
-                    mouseY={mouseY}
-                  />
-                ))}
-              </div>
-
-              {/* Mobile: Simple Feature Grid instead of floating cards */}
-              <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:hidden mt-8">
-                {FLOATING_FEATURES.map((feature, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 }}
-                    className={`bg-gradient-to-br ${feature.color} rounded-2xl p-4 sm:p-5 text-white text-center shadow-lg`}
-                  >
-                    <div className="text-3xl sm:text-4xl mb-2">{feature.icon}</div>
-                    <h3 className="text-sm sm:text-base font-bold mb-1">{feature.title}</h3>
-                    <p className="text-xs sm:text-sm opacity-90">{feature.desc}</p>
-                  </motion.div>
-                ))}
-              </div>
+              {/* Right: 3D Floating Feature Cards - True conditional rendering */}
+              {isLargeScreen ? (
+                <div className="relative h-[400px] lg:h-[600px]" style={{ perspective: '1500px', transformStyle: 'preserve-3d' }}>
+                  {FLOATING_FEATURES.map((feature, index) => (
+                    <FloatingCard3D
+                      key={index}
+                      feature={feature}
+                      index={index}
+                      mouseX={mouseX}
+                      mouseY={mouseY}
+                    />
+                  ))}
+                </div>
+              ) : (
+                /* Mobile: Simple Feature Grid instead of floating cards */
+                <div className="grid grid-cols-2 gap-3 sm:gap-4 mt-8">
+                  {FLOATING_FEATURES.map((feature, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.1 }}
+                      className={`bg-gradient-to-br ${feature.color} rounded-2xl p-4 sm:p-5 text-white text-center shadow-lg`}
+                    >
+                      <div className="text-3xl sm:text-4xl mb-2">{feature.icon}</div>
+                      <h3 className="text-sm sm:text-base font-bold mb-1">{feature.title}</h3>
+                      <p className="text-xs sm:text-sm opacity-90">{feature.desc}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Scroll Indicator - Hidden on mobile */}
-        <motion.div
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 hidden md:block"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 1.5 }}
-        >
-          <div className="w-6 h-10 border-2 border-gray-400 rounded-full flex justify-center p-2">
-            <motion.div
-              className="w-1 h-2 bg-gray-400 rounded-full"
-              animate={{ y: [0, 12, 0] }}
-              transition={{ repeat: Infinity, duration: 1.5 }}
-            />
-          </div>
-        </motion.div>
+        {/* Scroll Indicator - True conditional rendering */}
+        {isDesktop && (
+          <motion.div
+            className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+            animate={{ y: [0, 10, 0] }}
+            transition={{ repeat: Infinity, duration: 1.5 }}
+          >
+            <div className="w-6 h-10 border-2 border-gray-400 rounded-full flex justify-center p-2">
+              <motion.div
+                className="w-1 h-2 bg-gray-400 rounded-full"
+                animate={{ y: [0, 12, 0] }}
+                transition={{ repeat: Infinity, duration: 1.5 }}
+              />
+            </div>
+          </motion.div>
+        )}
       </section>
 
       {/* Features Section with Scroll Animations */}
@@ -912,8 +937,8 @@ export default function VariantD({ variant }: VariantProps) {
 }
 
 // Magnetic CTA Component - Mobile optimized (no magnetic effect on mobile)
-// Performance: Memoized with React.memo to prevent unnecessary re-renders
-const MagneticCTA = memo(function MagneticCTA({ onSubmit, email, setEmail }: any) {
+// Note: NOT memoized to allow smooth animations
+function MagneticCTA({ onSubmit, email, setEmail }: any) {
   const buttonRef = useRef<HTMLDivElement>(null);
   const { x, y } = useMagneticEffect(buttonRef, 0.4);
   const [ripples, setRipples] = useState<Array<{ x: number; y: number; id: number }>>([]);
@@ -986,10 +1011,10 @@ const MagneticCTA = memo(function MagneticCTA({ onSubmit, email, setEmail }: any
       </p>
     </motion.form>
   );
-});
+}
 
 // Animated Stats Component with Count-Up - Mobile optimized
-// Performance: Memoized to prevent re-renders
+// Note: Memoized to prevent re-renders (no complex animations)
 const AnimatedStats = memo(function AnimatedStats() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
@@ -1058,8 +1083,8 @@ const CountUp = memo(function CountUp({ end, suffix }: { end: number; suffix: st
 });
 
 // Features Section Component with Image Backgrounds
-// Performance: Memoized to prevent unnecessary re-renders
-const FeaturesSection = memo(function FeaturesSection() {
+// Note: NOT memoized to allow smooth GSAP ScrollTrigger animations
+function FeaturesSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -1198,7 +1223,7 @@ const FeaturesSection = memo(function FeaturesSection() {
       </div>
     </section>
   );
-});
+}
 
 // Feature Card with 3D Tilt and Hover Animation
 // Performance: Memoized with React.memo
@@ -1286,8 +1311,8 @@ const FeatureCard = memo(function FeatureCard({ feature, index }: { feature: any
 });
 
 // Impact Section with Full-Screen Background Image
-// Performance: Memoized
-const ImpactSection = memo(function ImpactSection() {
+// Note: NOT memoized to allow smooth GSAP ScrollTrigger animations
+function ImpactSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -1412,12 +1437,12 @@ const ImpactSection = memo(function ImpactSection() {
         />
       </div>
 
-      <div className="container mx-auto max-w-6xl text-center text-white relative z-10">
+      <div className="container mx-auto max-w-6xl text-center relative z-10">
         <div>
-          <h2 className="impact-title text-5xl font-bold mb-6">
+          <h2 className="impact-title text-5xl font-bold mb-6 text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]">
             Hành Trình Cùng Khách Hàng
           </h2>
-          <p className="impact-description text-xl mb-12 opacity-90 max-w-2xl mx-auto">
+          <p className="impact-description text-xl mb-12 max-w-2xl mx-auto text-amber-50 drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
             15,000+ gia đình Việt đã tin tưởng và lựa chọn Ecomate,
             biến ngôi nhà thành không gian sống lý tưởng
           </p>
@@ -1433,9 +1458,9 @@ const ImpactSection = memo(function ImpactSection() {
                 key={index}
                 className="impact-stat text-center backdrop-blur-sm bg-white/10 rounded-2xl p-6 hover:bg-white/20 transition-all cursor-pointer"
               >
-                <div className="text-6xl mb-4">{item.icon}</div>
-                <div className="text-4xl font-bold mb-2">{item.number}</div>
-                <div className="text-lg opacity-90">{item.label}</div>
+                <div className="text-6xl mb-4 drop-shadow-lg">{item.icon}</div>
+                <div className="text-4xl font-bold mb-2 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">{item.number}</div>
+                <div className="text-lg text-amber-50 drop-shadow-md">{item.label}</div>
               </div>
             ))}
           </div>
@@ -1443,11 +1468,11 @@ const ImpactSection = memo(function ImpactSection() {
       </div>
     </section>
   );
-});
+}
 
 // Testimonials Section with Subtle Background
-// Performance: Memoized
-const TestimonialsSection = memo(function TestimonialsSection() {
+// Note: NOT memoized to allow smooth GSAP ScrollTrigger animations
+function TestimonialsSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -1569,7 +1594,7 @@ const TestimonialsSection = memo(function TestimonialsSection() {
       </div>
     </section>
   );
-});
+}
 
 // Testimonial Card with Interactive Hover
 // Performance: Memoized
@@ -1641,8 +1666,8 @@ const TestimonialCard = memo(function TestimonialCard({ testimonial, index }: { 
 });
 
 // Final CTA Section with Dramatic Background
-// Performance: Memoized
-const FinalCTASection = memo(function FinalCTASection({ onSubmit, email, setEmail }: any) {
+// Note: NOT memoized to allow smooth GSAP ScrollTrigger animations
+function FinalCTASection({ onSubmit, email, setEmail }: any) {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -1819,11 +1844,11 @@ const FinalCTASection = memo(function FinalCTASection({ onSubmit, email, setEmai
       </div>
     </section>
   );
-});
+}
 
 // Final Magnetic CTA with Enhanced Interactivity
-// Performance: Memoized
-const FinalMagneticCTA = memo(function FinalMagneticCTA({ onSubmit, email, setEmail }: any) {
+// Note: NOT memoized to allow smooth animations
+function FinalMagneticCTA({ onSubmit, email, setEmail }: any) {
   const buttonRef = useRef<HTMLDivElement>(null);
   const { x, y } = useMagneticEffect(buttonRef, 0.5);
   const [ripples, setRipples] = useState<Array<{ x: number; y: number; id: number }>>([]);
@@ -1903,11 +1928,11 @@ const FinalMagneticCTA = memo(function FinalMagneticCTA({ onSubmit, email, setEm
       </motion.p>
     </motion.form>
   );
-});
+}
 
 // 3D Floating Feature Card Component
-// Performance: Memoized
-const FloatingCard3D = memo(function FloatingCard3D({ feature, index, mouseX, mouseY }: any) {
+// Note: NOT memoized to allow smooth 3D animations and mouse interactions
+function FloatingCard3D({ feature, index, mouseX, mouseY }: any) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -2076,4 +2101,4 @@ const FloatingCard3D = memo(function FloatingCard3D({ feature, index, mouseX, mo
       </motion.div>
     </motion.div>
   );
-});
+}
