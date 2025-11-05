@@ -84,12 +84,22 @@ function useMagneticEffect(ref: React.RefObject<HTMLElement | null>, strength = 
 const IMAGES = {
   hero: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=3540&auto=format&fit=crop', // Bright modern living room
   heroOverlay: 'https://images.unsplash.com/photo-1585412727339-54e4bae3bbf9?q=80&w=3540&auto=format&fit=crop', // Smart home tablet
+  heroLayer2: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=3540&auto=format&fit=crop', // Modern home interior
+  heroLayer3: 'https://images.unsplash.com/photo-1600210492493-0946911123ea?q=80&w=3540&auto=format&fit=crop', // Cozy living space
   feature1: 'https://images.unsplash.com/photo-1556909212-d5b604d0c90d?q=80&w=3540&auto=format&fit=crop', // Modern kitchen interior
   feature2: 'https://images.unsplash.com/photo-1617104678098-ab8e2a3e8c66?q=80&w=3540&auto=format&fit=crop', // Bedroom with warm lighting
   impact: 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=3540&auto=format&fit=crop', // Modern family home
   testimonial: 'https://images.unsplash.com/photo-1600607687644-aac4c3eac7f4?q=80&w=3540&auto=format&fit=crop', // Cozy home interior
   cta: 'https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=3540&auto=format&fit=crop', // Beautiful modern apartment
 };
+
+// 3D Floating Feature Cards Data
+const FLOATING_FEATURES = [
+  { icon: '🏠', title: 'Smart Home', desc: 'IoT Solutions', color: 'from-amber-400 to-orange-500', delay: 0 },
+  { icon: '💡', title: 'LED Control', desc: 'App Control', color: 'from-yellow-400 to-amber-500', delay: 0.2 },
+  { icon: '🌡️', title: 'Climate', desc: 'Auto Adjust', color: 'from-orange-400 to-red-500', delay: 0.4 },
+  { icon: '🔒', title: 'Security', desc: '24/7 Monitor', color: 'from-amber-500 to-orange-600', delay: 0.6 },
+];
 
 interface VariantProps {
   variant: Variant;
@@ -140,60 +150,155 @@ export default function VariantD({ variant }: VariantProps) {
   }, []);
 
   useEffect(() => {
-    // GSAP Hero Animation
+    // GSAP Hero Animation - Dramatic entrance
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline();
+      const tl = gsap.timeline({ delay: 0.3 });
 
-      tl.from('.hero-title', {
-        y: 100,
+      // Morphing background reveal
+      tl.from('.hero-morph-bg', {
+        clipPath: 'polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%)',
+        duration: 1.5,
+        ease: 'power4.out',
+      })
+      // Aura particles fade in
+      .from('.aura-particle', {
+        scale: 0,
+        opacity: 0,
+        stagger: 0.05,
+        duration: 0.8,
+        ease: 'back.out(2)',
+      }, '-=0.8')
+      // 3D image layers reveal with depth
+      .from('.hero-layer-1', {
+        scale: 1.3,
+        opacity: 0,
+        duration: 1.2,
+        ease: 'power3.out',
+      }, '-=1')
+      .from('.hero-layer-2', {
+        x: -100,
         opacity: 0,
         duration: 1,
         ease: 'power3.out',
-      })
+      }, '-=0.8')
+      .from('.hero-layer-3', {
+        x: 100,
+        opacity: 0,
+        duration: 1,
+        ease: 'power3.out',
+      }, '-=0.9')
+      // Badge with bounce
+      .from('.hero-badge', {
+        scale: 0,
+        rotation: -180,
+        opacity: 0,
+        duration: 1,
+        ease: 'elastic.out(1, 0.6)',
+      }, '-=0.5')
+      // Title split reveal with 3D rotation
+      .from('.hero-title-word', {
+        rotationX: -90,
+        opacity: 0,
+        y: 50,
+        stagger: 0.1,
+        duration: 0.8,
+        ease: 'back.out(2)',
+        transformOrigin: 'top center',
+      }, '-=0.6')
+      // Subtitle wave reveal
       .from('.hero-subtitle', {
         y: 50,
         opacity: 0,
         duration: 0.8,
         ease: 'power3.out',
-      }, '-=0.5')
-      .from('.hero-cta', {
-        y: 30,
-        opacity: 0,
-        duration: 0.6,
-        ease: 'power3.out',
       }, '-=0.4')
-      .from('.hero-badge', {
+      // 3D floating cards cascade
+      .from('.floating-card-3d', {
         scale: 0,
+        rotationY: 180,
         opacity: 0,
-        duration: 0.5,
+        stagger: 0.15,
+        duration: 1,
         ease: 'back.out(1.7)',
-      }, '-=0.3');
+        transformOrigin: 'center center',
+      }, '-=0.5')
+      // CTA magnetic reveal
+      .from('.hero-cta', {
+        scale: 0.5,
+        opacity: 0,
+        duration: 0.8,
+        ease: 'elastic.out(1, 0.8)',
+      }, '-=0.4')
+      // Light rays sweep
+      .from('.light-ray', {
+        scaleX: 0,
+        opacity: 0,
+        stagger: 0.1,
+        duration: 1,
+        ease: 'power2.out',
+      }, '-=0.8');
 
-      // Floating animation for hero elements
-      gsap.to('.float-1', {
-        y: -20,
-        duration: 2,
-        repeat: -1,
-        yoyo: true,
-        ease: 'power1.inOut',
-      });
-
-      gsap.to('.float-2', {
-        y: -15,
-        duration: 2.5,
-        repeat: -1,
-        yoyo: true,
-        ease: 'power1.inOut',
-        delay: 0.5,
-      });
-
-      gsap.to('.float-3', {
-        y: -25,
+      // Continuous floating animations
+      gsap.to('.float-card-1', {
+        y: -30,
+        x: 10,
+        rotation: 5,
         duration: 3,
         repeat: -1,
         yoyo: true,
-        ease: 'power1.inOut',
+        ease: 'sine.inOut',
+      });
+
+      gsap.to('.float-card-2', {
+        y: -20,
+        x: -15,
+        rotation: -3,
+        duration: 3.5,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        delay: 0.5,
+      });
+
+      gsap.to('.float-card-3', {
+        y: -25,
+        x: 12,
+        rotation: 4,
+        duration: 4,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
         delay: 1,
+      });
+
+      gsap.to('.float-card-4', {
+        y: -35,
+        x: -8,
+        rotation: -5,
+        duration: 3.2,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        delay: 1.5,
+      });
+
+      // Floating image layers
+      gsap.to('.hero-layer-float', {
+        y: -15,
+        duration: 4,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+      });
+
+      // Aura breathing effect
+      gsap.to('.aura-glow', {
+        scale: 1.3,
+        opacity: 0.6,
+        duration: 3,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
       });
     }, heroRef);
 
@@ -237,150 +342,297 @@ export default function VariantD({ variant }: VariantProps) {
         ))}
       </div>
 
-      {/* Hero Section - Animated with GSAP */}
-      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Parallax Background Image Layers with Mouse Interaction */}
-        <motion.div
-          style={{
-            y,
-            opacity,
-            x: heroParallaxX,
-          }}
-          className="absolute inset-0 z-0"
-        >
-          {/* Main background image */}
-          <div className="absolute inset-0">
+      {/* Hero Section - 3D Premium Animation */}
+      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{ perspective: '2000px' }}>
+        {/* Morphing Gradient Background - Animated */}
+        <div className="hero-morph-bg absolute inset-0 z-0">
+          <motion.div
+            className="absolute inset-0"
+            animate={{
+              background: [
+                'radial-gradient(circle at 20% 50%, rgba(251, 191, 36, 0.3) 0%, rgba(245, 158, 11, 0.2) 50%, transparent 70%)',
+                'radial-gradient(circle at 80% 50%, rgba(245, 158, 11, 0.3) 0%, rgba(251, 191, 36, 0.2) 50%, transparent 70%)',
+                'radial-gradient(circle at 50% 20%, rgba(251, 146, 60, 0.3) 0%, rgba(249, 115, 22, 0.2) 50%, transparent 70%)',
+                'radial-gradient(circle at 50% 80%, rgba(249, 115, 22, 0.3) 0%, rgba(251, 146, 60, 0.2) 50%, transparent 70%)',
+                'radial-gradient(circle at 20% 50%, rgba(251, 191, 36, 0.3) 0%, rgba(245, 158, 11, 0.2) 50%, transparent 70%)',
+              ],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: 'linear',
+            }}
+          />
+        </div>
+
+        {/* 3D Layered Background Images with Depth */}
+        <div className="absolute inset-0 z-0" style={{ transformStyle: 'preserve-3d' }}>
+          {/* Layer 1 - Base */}
+          <motion.div
+            className="hero-layer-1 hero-layer-float absolute inset-0"
+            style={{
+              y,
+              opacity,
+              x: heroParallaxX,
+              transform: 'translateZ(-100px)',
+            }}
+          >
             <Image
               src={IMAGES.hero}
               alt="Modern Smart Living Room"
               fill
               priority
-              className="object-cover float-1"
+              className="object-cover"
               style={{ objectPosition: 'center center' }}
             />
-            {/* Warm gradient overlays for cozy home feeling */}
-            <div className="absolute inset-0 bg-gradient-to-b from-amber-900/40 via-orange-900/20 to-primary-50/95" />
-            <div className="absolute inset-0 bg-gradient-to-r from-slate-900/50 via-slate-800/30 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-t from-primary-50/90 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-b from-amber-900/50 via-orange-900/30 to-slate-900/70" />
+          </motion.div>
 
-            {/* Ambient warm glow effect - breathing animation */}
-            <motion.div
-              className="absolute inset-0 bg-gradient-radial from-amber-500/10 via-transparent to-transparent"
-              animate={{
-                opacity: [0.3, 0.5, 0.3],
-                scale: [1, 1.1, 1],
-              }}
-              transition={{
-                duration: 8,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-            />
-          </div>
-
-          {/* Smart home controls overlay with subtle parallax */}
+          {/* Layer 2 - Mid depth with parallax */}
           <motion.div
-            className="absolute top-0 right-0 w-1/3 h-full opacity-30 float-2"
-            style={{ y: useTransform(scrollYProgress, [0, 1], ['0%', '15%']) }}
+            className="hero-layer-2 absolute left-0 top-0 w-1/2 h-full opacity-40"
+            style={{
+              y: useTransform(scrollYProgress, [0, 1], ['0%', '20%']),
+              x: useTransform(mouseX, [0, typeof window !== 'undefined' ? window.innerWidth : 1920], [-30, 30]),
+              transform: 'translateZ(-50px)',
+            }}
           >
             <Image
-              src={IMAGES.heroOverlay}
-              alt="Smart Home Controls"
+              src={IMAGES.heroLayer2}
+              alt="Modern Interior"
+              fill
+              className="object-cover mix-blend-overlay"
+            />
+          </motion.div>
+
+          {/* Layer 3 - Front depth */}
+          <motion.div
+            className="hero-layer-3 absolute right-0 top-0 w-1/2 h-full opacity-30"
+            style={{
+              y: useTransform(scrollYProgress, [0, 1], ['0%', '15%']),
+              x: useTransform(mouseX, [0, typeof window !== 'undefined' ? window.innerWidth : 1920], [30, -30]),
+              transform: 'translateZ(0px)',
+            }}
+          >
+            <Image
+              src={IMAGES.heroLayer3}
+              alt="Cozy Space"
               fill
               className="object-cover mix-blend-soft-light"
             />
           </motion.div>
 
-          {/* Soft ambient light particles - slower, warmer */}
-          <div className="absolute inset-0 float-3">
-            {[...Array(15)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="absolute w-2 h-2 rounded-full"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  background: 'radial-gradient(circle, rgba(251, 191, 36, 0.6) 0%, transparent 70%)',
-                }}
-                animate={{
-                  y: [-10, 10],
-                  opacity: [0.2, 0.4, 0.2],
-                  scale: [1, 1.2, 1],
-                }}
-                transition={{
-                  duration: 5 + Math.random() * 3,
-                  repeat: Infinity,
-                  delay: Math.random() * 3,
-                  ease: 'easeInOut',
-                }}
-              />
-            ))}
-          </div>
-        </motion.div>
+          {/* Final gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-primary-50/95 via-slate-900/40 to-transparent" />
+        </div>
 
-        <motion.div
-          className="container mx-auto px-4 relative z-10"
-          style={{ x: useTransform(mouseX, [0, typeof window !== 'undefined' ? window.innerWidth : 1920], [-10, 10]) }}
-        >
-          <div className="max-w-5xl mx-auto text-center">
-            {/* Trust Badge with enhanced styling */}
+        {/* Premium Aura Particle System */}
+        <div className="absolute inset-0 z-10 pointer-events-none">
+          {[...Array(30)].map((_, i) => (
             <motion.div
-              className="hero-badge inline-flex items-center gap-2 bg-white/95 backdrop-blur-md px-4 py-2 rounded-full shadow-2xl mb-6 border border-primary-100"
-              whileHover={{ scale: 1.05, boxShadow: '0 20px 40px rgba(0,0,0,0.2)' }}
-            >
-              <span className="w-2 h-2 bg-primary-500 rounded-full animate-pulse" />
-              <span className="text-sm font-medium text-gray-800">
-                Được tin cậy bởi <strong className="text-primary-600">15,000+</strong> gia đình Việt
-              </span>
-            </motion.div>
-
-            {/* Hero Title with warm, welcoming typography */}
-            <h1
-              className="hero-title text-6xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight"
+              key={i}
+              className="aura-particle absolute rounded-full"
               style={{
-                color: '#ffffff',
-                textShadow: '0 2px 10px rgba(0,0,0,0.4), 0 4px 20px rgba(0,0,0,0.3), 0 0 40px rgba(251, 146, 60, 0.2)',
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                width: `${8 + Math.random() * 16}px`,
+                height: `${8 + Math.random() * 16}px`,
+                background: `radial-gradient(circle, rgba(251, 191, 36, ${0.6 + Math.random() * 0.4}) 0%, rgba(245, 158, 11, ${0.3 + Math.random() * 0.3}) 40%, transparent 70%)`,
+                filter: `blur(${2 + Math.random() * 4}px)`,
               }}
-            >
-              Tiện Ích{' '}
-              <span
-                className="relative inline-block"
-                style={{
-                  background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                  filter: 'drop-shadow(0 0 30px rgba(251, 191, 36, 0.6))',
-                }}
-              >
-                Mỗi Ngày
-                <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 200 12" fill="none">
-                  <path d="M2 10C50 2 150 2 198 10" stroke="#fbbf24" strokeWidth="3" strokeLinecap="round"/>
-                </svg>
-              </span>
-              <br />
-              Trong Từng Căn Phòng
-            </h1>
+              animate={{
+                y: [0, -30 - Math.random() * 40, 0],
+                x: [0, (Math.random() - 0.5) * 30, 0],
+                opacity: [0.3, 0.8, 0.3],
+                scale: [1, 1.3, 1],
+              }}
+              transition={{
+                duration: 4 + Math.random() * 6,
+                repeat: Infinity,
+                delay: Math.random() * 3,
+                ease: 'easeInOut',
+              }}
+            />
+          ))}
+        </div>
 
-            {/* Hero Subtitle with warm, inviting tone */}
-            <p
-              className="hero-subtitle text-xl md:text-2xl mb-10 max-w-3xl mx-auto leading-relaxed font-medium"
+        {/* Aura Glow Effects around content */}
+        <div className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center">
+          <motion.div
+            className="aura-glow w-[800px] h-[800px] rounded-full opacity-30"
+            style={{
+              background: 'radial-gradient(circle, rgba(251, 191, 36, 0.4) 0%, rgba(245, 158, 11, 0.2) 30%, transparent 60%)',
+              filter: 'blur(60px)',
+            }}
+          />
+        </div>
+
+        {/* Light Rays Effect */}
+        <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
+          {[...Array(5)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="light-ray absolute h-full opacity-10"
               style={{
-                color: '#fef3c7',
-                textShadow: '0 2px 8px rgba(0,0,0,0.5), 0 1px 4px rgba(0,0,0,0.4)',
+                left: `${20 + i * 15}%`,
+                width: '2px',
+                background: 'linear-gradient(to bottom, transparent, rgba(251, 191, 36, 0.8), transparent)',
+                transformOrigin: 'top',
               }}
-            >
-              Khám phá <span className="text-amber-200 font-bold">giải pháp nhà thông minh</span> và tiện ích gia dụng hiện đại,
-              biến không gian sống của bạn thành nơi an lạc, tiện nghi và đầy cảm hứng
-            </p>
+              animate={{
+                scaleY: [1, 1.2, 1],
+                opacity: [0.05, 0.15, 0.05],
+              }}
+              transition={{
+                duration: 3 + i,
+                repeat: Infinity,
+                delay: i * 0.5,
+                ease: 'easeInOut',
+              }}
+            />
+          ))}
+        </div>
 
-            {/* Hero CTA with Magnetic Button */}
-            <MagneticCTA onSubmit={handleSubmit} email={email} setEmail={setEmail} />
+        <div className="container mx-auto px-4 relative z-20">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              {/* Left: Content */}
+              <div className="text-center lg:text-left">
+                {/* Trust Badge with glass morphism */}
+                <motion.div
+                  className="hero-badge inline-flex items-center gap-2 bg-white/10 backdrop-blur-xl px-6 py-3 rounded-full shadow-2xl mb-8 border border-white/20"
+                  whileHover={{ scale: 1.05, backgroundColor: 'rgba(255, 255, 255, 0.15)' }}
+                  style={{
+                    boxShadow: '0 8px 32px rgba(251, 191, 36, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+                  }}
+                >
+                  <span className="w-3 h-3 bg-amber-400 rounded-full animate-pulse" />
+                  <span className="text-sm font-bold text-white">
+                    Được tin cậy bởi <span className="text-amber-300">15,000+</span> gia đình Việt
+                  </span>
+                </motion.div>
 
-            {/* Social Proof Stats */}
-            <AnimatedStats />
+                {/* Hero Title with 3D split text - each word animated */}
+                <div className="mb-6" style={{ perspective: '1000px' }}>
+                  <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
+                    <div className="hero-title-word inline-block mr-3" style={{
+                      color: '#ffffff',
+                      textShadow: '0 4px 20px rgba(0,0,0,0.5), 0 8px 40px rgba(0,0,0,0.3), 0 0 60px rgba(251, 191, 36, 0.3)',
+                      transformStyle: 'preserve-3d',
+                    }}>
+                      Tiện
+                    </div>
+                    <div className="hero-title-word inline-block mr-3" style={{
+                      color: '#ffffff',
+                      textShadow: '0 4px 20px rgba(0,0,0,0.5), 0 8px 40px rgba(0,0,0,0.3), 0 0 60px rgba(251, 191, 36, 0.3)',
+                      transformStyle: 'preserve-3d',
+                    }}>
+                      Ích
+                    </div>
+                    <div className="hero-title-word inline-block relative" style={{
+                      background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #fb923c 100%)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      backgroundClip: 'text',
+                      filter: 'drop-shadow(0 0 40px rgba(251, 191, 36, 0.8))',
+                      transformStyle: 'preserve-3d',
+                    }}>
+                      Mỗi Ngày
+                      {/* Animated underline */}
+                      <motion.div
+                        className="absolute -bottom-2 left-0 right-0 h-1 rounded-full"
+                        style={{
+                          background: 'linear-gradient(90deg, #fbbf24, #f59e0b, #fb923c)',
+                        }}
+                        animate={{
+                          scaleX: [0, 1],
+                          opacity: [0, 1],
+                        }}
+                        transition={{
+                          delay: 1.5,
+                          duration: 0.8,
+                          ease: 'easeOut',
+                        }}
+                      />
+                    </div>
+                    <br />
+                    <div className="hero-title-word inline-block mr-3" style={{
+                      color: '#ffffff',
+                      textShadow: '0 4px 20px rgba(0,0,0,0.5), 0 8px 40px rgba(0,0,0,0.3), 0 0 60px rgba(251, 191, 36, 0.3)',
+                      transformStyle: 'preserve-3d',
+                    }}>
+                      Trong
+                    </div>
+                    <div className="hero-title-word inline-block mr-3" style={{
+                      color: '#ffffff',
+                      textShadow: '0 4px 20px rgba(0,0,0,0.5), 0 8px 40px rgba(0,0,0,0.3), 0 0 60px rgba(251, 191, 36, 0.3)',
+                      transformStyle: 'preserve-3d',
+                    }}>
+                      Từng
+                    </div>
+                    <div className="hero-title-word inline-block mr-3" style={{
+                      color: '#ffffff',
+                      textShadow: '0 4px 20px rgba(0,0,0,0.5), 0 8px 40px rgba(0,0,0,0.3), 0 0 60px rgba(251, 191, 36, 0.3)',
+                      transformStyle: 'preserve-3d',
+                    }}>
+                      Căn
+                    </div>
+                    <div className="hero-title-word inline-block" style={{
+                      color: '#ffffff',
+                      textShadow: '0 4px 20px rgba(0,0,0,0.5), 0 8px 40px rgba(0,0,0,0.3), 0 0 60px rgba(251, 191, 36, 0.3)',
+                      transformStyle: 'preserve-3d',
+                    }}>
+                      Phòng
+                    </div>
+                  </h1>
+                </div>
+
+                {/* Hero Subtitle with glass background */}
+                <p
+                  className="hero-subtitle text-lg md:text-xl mb-10 leading-relaxed font-medium"
+                  style={{
+                    color: '#fef3c7',
+                    textShadow: '0 2px 8px rgba(0,0,0,0.6), 0 1px 4px rgba(0,0,0,0.5)',
+                  }}
+                >
+                  Khám phá{' '}
+                  <span
+                    className="font-bold"
+                    style={{
+                      background: 'linear-gradient(135deg, #fcd34d 0%, #fbbf24 100%)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                    }}
+                  >
+                    giải pháp nhà thông minh
+                  </span>{' '}
+                  và tiện ích gia dụng hiện đại, biến không gian sống thành nơi an lạc và đầy cảm hứng
+                </p>
+
+                {/* Hero CTA with Magnetic Button */}
+                <MagneticCTA onSubmit={handleSubmit} email={email} setEmail={setEmail} />
+
+                {/* Social Proof Stats */}
+                <div className="mt-12">
+                  <AnimatedStats />
+                </div>
+              </div>
+
+              {/* Right: 3D Floating Feature Cards */}
+              <div className="relative h-[500px] lg:h-[600px]" style={{ perspective: '1500px', transformStyle: 'preserve-3d' }}>
+                {FLOATING_FEATURES.map((feature, index) => (
+                  <FloatingCard3D
+                    key={index}
+                    feature={feature}
+                    index={index}
+                    mouseX={mouseX}
+                    mouseY={mouseY}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Scroll Indicator */}
         <motion.div
@@ -1399,5 +1651,177 @@ function FinalMagneticCTA({ onSubmit, email, setEmail }: any) {
         🎁 Miễn phí vận chuyển • ⚡ Giao hàng trong 24h • 🔒 Thanh toán an toàn
       </motion.p>
     </motion.form>
+  );
+}
+
+// 3D Floating Feature Card Component
+function FloatingCard3D({ feature, index, mouseX, mouseY }: any) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
+
+  // 3D tilt based on mouse position
+  const rotateX = useTransform(
+    mouseY,
+    [0, typeof window !== 'undefined' ? window.innerHeight : 1080],
+    [10, -10]
+  );
+  const rotateY = useTransform(
+    mouseX,
+    [0, typeof window !== 'undefined' ? window.innerWidth : 1920],
+    [-10, 10]
+  );
+
+  // Positioning for cards in a cascade layout
+  const positions = [
+    { top: '10%', left: '10%', rotation: -5 },
+    { top: '30%', right: '15%', rotation: 5 },
+    { top: '55%', left: '5%', rotation: 3 },
+    { top: '75%', right: '10%', rotation: -4 },
+  ];
+
+  const position = positions[index];
+
+  return (
+    <motion.div
+      ref={cardRef}
+      className={`floating-card-3d float-card-${index + 1} absolute`}
+      style={{
+        ...position,
+        transformStyle: 'preserve-3d',
+        perspective: '1000px',
+      }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      whileHover={{
+        scale: 1.1,
+        zIndex: 50,
+        rotateZ: 0,
+      }}
+    >
+      <motion.div
+        className="relative w-48 h-56 rounded-3xl overflow-hidden cursor-pointer"
+        style={{
+          transformStyle: 'preserve-3d',
+          rotateX,
+          rotateY,
+        }}
+      >
+        {/* Glass morphism background with gradient */}
+        <motion.div
+          className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-90`}
+          animate={{
+            opacity: isHovered ? 1 : 0.9,
+          }}
+        />
+
+        {/* Glass overlay */}
+        <div className="absolute inset-0 bg-white/10 backdrop-blur-xl" />
+
+        {/* Border glow */}
+        <motion.div
+          className="absolute inset-0 rounded-3xl"
+          style={{
+            border: '2px solid rgba(255, 255, 255, 0.2)',
+            boxShadow: isHovered
+              ? '0 20px 60px rgba(251, 191, 36, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3)'
+              : '0 10px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+          }}
+          animate={{
+            boxShadow: isHovered
+              ? '0 25px 70px rgba(251, 191, 36, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.4)'
+              : '0 10px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+          }}
+        />
+
+        {/* Content */}
+        <div
+          className="relative z-10 h-full flex flex-col items-center justify-center p-6 text-white"
+          style={{
+            transform: 'translateZ(50px)',
+            textShadow: '0 2px 10px rgba(0,0,0,0.5)',
+          }}
+        >
+          {/* Icon with 3D float */}
+          <motion.div
+            className="text-6xl mb-4"
+            animate={{
+              rotateY: isHovered ? 360 : 0,
+              scale: isHovered ? 1.2 : 1,
+            }}
+            transition={{
+              rotateY: { duration: 0.6, ease: 'backOut' },
+              scale: { duration: 0.3 },
+            }}
+            style={{
+              filter: 'drop-shadow(0 4px 20px rgba(0,0,0,0.3))',
+            }}
+          >
+            {feature.icon}
+          </motion.div>
+
+          {/* Title */}
+          <h3 className="text-xl font-bold mb-2 text-center">{feature.title}</h3>
+
+          {/* Description */}
+          <p className="text-sm opacity-90 text-center">{feature.desc}</p>
+
+          {/* Floating particles around card */}
+          {isHovered && (
+            <>
+              {[...Array(8)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute w-2 h-2 rounded-full bg-white"
+                  style={{
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                  }}
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{
+                    scale: [0, 1, 0],
+                    opacity: [0, 0.8, 0],
+                    x: [0, (Math.random() - 0.5) * 40],
+                    y: [0, (Math.random() - 0.5) * 40],
+                  }}
+                  transition={{
+                    duration: 1,
+                    delay: i * 0.1,
+                    repeat: Infinity,
+                  }}
+                />
+              ))}
+            </>
+          )}
+        </div>
+
+        {/* Shine effect on hover */}
+        <motion.div
+          className="absolute inset-0 rounded-3xl"
+          style={{
+            background: isHovered
+              ? 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.3) 0%, transparent 70%)'
+              : 'transparent',
+          }}
+          animate={{
+            opacity: isHovered ? 1 : 0,
+          }}
+        />
+
+        {/* Aura ring effect */}
+        {isHovered && (
+          <motion.div
+            className="absolute -inset-4 rounded-3xl"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 0.6, scale: 1.1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            style={{
+              background: `radial-gradient(circle, transparent 40%, ${feature.color.includes('amber') ? 'rgba(251, 191, 36, 0.4)' : 'rgba(249, 115, 22, 0.4)'} 70%, transparent 100%)`,
+              filter: 'blur(15px)',
+              zIndex: -1,
+            }}
+          />
+        )}
+      </motion.div>
+    </motion.div>
   );
 }
