@@ -13,11 +13,17 @@ Landing pages với A/B Testing được xây dựng với Next.js 14+ (App Rout
   - **Variant A**: Professional & Trust-focused (stats, credibility)
   - **Variant B**: Emotional & Impact-focused (urgency, stories)
   - **Variant C**: Simple & Action-focused (minimalist, clear CTA)
-- ✅ **Base Components Library**:
+- ✅ **Base Components Library** (10 components):
   - Button (7 variants, 5 sizes)
   - Input (3 variants, 3 sizes)
   - Card (compound component)
   - Dialog (Radix UI powered)
+  - Checkbox, RadioGroup, Switch
+  - Select (dropdown)
+  - Tooltip
+  - Label
+- ✅ **Storybook** - Component documentation & playground
+- ✅ **Jest + Testing Library** - 29 tests passing
 - ✅ **Design Tokens** (colors, typography, spacing)
 - ✅ **Analytics Tracking** system
 - ✅ **Cookie-based** user assignment
@@ -89,6 +95,20 @@ Mở [http://localhost:3000](http://localhost:3000)
 ```bash
 npm run build
 npm start
+```
+
+### Run Storybook
+```bash
+npm run storybook
+```
+
+Visit [http://localhost:6006](http://localhost:6006) to view component library.
+
+### Run Tests
+```bash
+npm test                 # Run all tests
+npm run test:watch      # Watch mode
+npm run test:coverage   # Coverage report
 ```
 
 ## 🧪 Testing Variants
