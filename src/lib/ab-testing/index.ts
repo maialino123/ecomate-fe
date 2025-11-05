@@ -3,7 +3,7 @@
  * Handles variant assignment and routing logic
  */
 
-export type Variant = 'A' | 'B' | 'C';
+export type Variant = 'A' | 'B' | 'C' | 'D';
 
 export interface ABTestConfig {
   variants: Variant[];
@@ -12,11 +12,12 @@ export interface ABTestConfig {
 
 // Default configuration for A/B testing
 export const DEFAULT_AB_CONFIG: ABTestConfig = {
-  variants: ['A', 'B', 'C'],
+  variants: ['A', 'B', 'C', 'D'],
   weights: {
-    A: 34,
-    B: 33,
-    C: 33,
+    A: 25,
+    B: 25,
+    C: 25,
+    D: 25,
   },
 };
 

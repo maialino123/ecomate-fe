@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import type { Variant } from '@/lib/ab-testing';
 import { Button, Input, Card, CardContent } from '@/components/ui';
+import { Header, Footer } from '@/components/common';
 
 interface VariantProps {
   variant: Variant;
@@ -24,8 +25,10 @@ export default function VariantA({ variant }: VariantProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
-      {/* Hero Section */}
+    <>
+      <Header />
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
+        {/* Hero Section */}
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto text-center">
           {/* Logo */}
@@ -130,5 +133,7 @@ export default function VariantA({ variant }: VariantProps) {
         </div>
       </div>
     </div>
+    <Footer />
+    </>
   );
 }
