@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, useMemo, memo } from 'react';
 import Image from 'next/image';
 import { motion, useScroll, useTransform, useSpring, useInView, useMotionValue, useSpring as useFramerSpring } from 'framer-motion';
 import { gsap } from 'gsap';
@@ -11,6 +11,76 @@ import { Button, Input } from '@/components/ui';
 // Register GSAP plugins
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
+}
+
+// Performance: Custom hook to memoize particle positions (prevent regeneration on every render)
+function useMemoizedParticles(count: number) {
+  return useMemo(() => {
+    return Array.from({ length: count }, (_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      size: 10 + Math.random() * 14,
+      opacity: 0.5 + Math.random() * 0.3,
+      blur: 3 + Math.random() * 3,
+      delay: Math.random() * 4,
+      duration: 5 + Math.random() * 5,
+      moveX: (Math.random() - 0.5) * 20,
+      moveY: 25 + Math.random() * 35,
+    }));
+  }, [count]); // Only regenerate if count changes
+}
+
+// Performance: Custom hook to memoize geometric pattern positions
+function useMemoizedGeometry() {
+  return useMemo(() => ({
+    hexagons: Array.from({ length: 4 }, (_, i) => ({
+      id: i,
+      left: 15 + i * 20,
+      top: 20 + (i % 3) * 25,
+      rotateDuration: 20 + i * 3,
+      opacityDuration: 6 + i,
+    })),
+    circles: Array.from({ length: 2 }, (_, i) => ({
+      id: i,
+      right: 15 + i * 30,
+      top: 20 + i * 30,
+      duration: 8 + i * 2,
+      delay: i * 1.5,
+    })),
+    mobileCircles: Array.from({ length: 2 }, (_, i) => ({
+      id: i,
+      right: 20 + i * 50,
+      top: 25 + i * 40,
+      duration: 8 + i * 2,
+      delay: i * 2,
+    })),
+    waves: Array.from({ length: 2 }, (_, i) => ({
+      id: i,
+      top: 35 + i * 35,
+      duration: 10 + i * 2,
+      delay: i * 4,
+    })),
+    lightRays: Array.from({ length: 4 }, (_, i) => ({
+      id: i,
+      left: 25 + i * 18,
+      duration: 4 + i * 1.5,
+      delay: i * 0.8,
+    })),
+  }), []); // Empty deps - static data
+}
+
+// Performance: Custom hook to memoize mobile particles
+function useMemoizedMobileParticles() {
+  return useMemo(() => {
+    return Array.from({ length: 3 }, (_, i) => ({
+      id: i,
+      left: 20 + i * 30,
+      top: 30 + i * 20,
+      duration: 6 + i * 2,
+      delay: i * 1.5,
+    }));
+  }, []); // Static data
 }
 
 // Custom hook for mouse position tracking
@@ -120,6 +190,11 @@ export default function VariantD({ variant }: VariantProps) {
   const [cursorTrail, setCursorTrail] = useState<Array<{ x: number; y: number; id: number }>>([]);
   const heroRef = useRef<HTMLDivElement>(null);
   const featuresRef = useRef<HTMLDivElement>(null);
+
+  // Performance: Memoize particles and geometry to prevent recreation on every render
+  const desktopParticles = useMemoizedParticles(6);
+  const mobileParticles = useMemoizedMobileParticles();
+  const geometry = useMemoizedGeometry();
 
   // Mouse position for interactive parallax
   const { x: mouseX, y: mouseY } = useMousePosition();
@@ -305,7 +380,8 @@ export default function VariantD({ variant }: VariantProps) {
     return () => ctx.revert();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Performance: Memoize handleSubmit to prevent recreation on every render
+  const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     // TODO: Track conversion
     console.log('Variant D - Email submitted:', email, 'Variant:', variant);
@@ -319,7 +395,7 @@ export default function VariantD({ variant }: VariantProps) {
     });
 
     alert('Cảm ơn bạn đã đăng ký! Chúng tôi sẽ liên hệ sớm.');
-  };
+  }, [email, variant]); // Only recreate when email or variant changes
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary-50 via-white to-primary-50 relative">
@@ -420,42 +496,43 @@ export default function VariantD({ variant }: VariantProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-primary-50/98 via-slate-900/50 to-transparent md:from-primary-50/95 md:via-slate-900/40" />
         </div>
 
-        {/* Optimized Aura Particle System - Reduced count on mobile */}
+        {/* Optimized Aura Particle System - Memoized positions prevent re-renders */}
         <div className="absolute inset-0 z-10 pointer-events-none">
-          {[...Array(6)].map((_, i) => (
+          {/* Desktop particles - Memoized */}
+          {desktopParticles.map((particle) => (
             <motion.div
-              key={i}
+              key={particle.id}
               className="aura-particle absolute rounded-full hidden md:block"
               style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                width: `${10 + Math.random() * 14}px`,
-                height: `${10 + Math.random() * 14}px`,
-                background: `radial-gradient(circle, rgba(251, 191, 36, ${0.5 + Math.random() * 0.3}) 0%, rgba(245, 158, 11, ${0.25 + Math.random() * 0.25}) 40%, transparent 70%)`,
-                filter: `blur(${3 + Math.random() * 3}px)`,
+                left: `${particle.left}%`,
+                top: `${particle.top}%`,
+                width: `${particle.size}px`,
+                height: `${particle.size}px`,
+                background: `radial-gradient(circle, rgba(251, 191, 36, ${particle.opacity}) 0%, rgba(245, 158, 11, ${particle.opacity * 0.5}) 40%, transparent 70%)`,
+                filter: `blur(${particle.blur}px)`,
               }}
               animate={{
-                y: [0, -25 - Math.random() * 35, 0],
-                x: [0, (Math.random() - 0.5) * 20, 0],
+                y: [0, -particle.moveY, 0],
+                x: [0, particle.moveX, 0],
                 opacity: [0.2, 0.6, 0.2],
                 scale: [1, 1.2, 1],
               }}
               transition={{
-                duration: 5 + Math.random() * 5,
+                duration: particle.duration,
                 repeat: Infinity,
-                delay: Math.random() * 4,
+                delay: particle.delay,
                 ease: 'easeInOut',
               }}
             />
           ))}
-          {/* Mobile: Only 3 particles */}
-          {[...Array(3)].map((_, i) => (
+          {/* Mobile particles - Memoized */}
+          {mobileParticles.map((particle) => (
             <motion.div
-              key={`mobile-${i}`}
+              key={`mobile-${particle.id}`}
               className="aura-particle absolute rounded-full md:hidden"
               style={{
-                left: `${20 + i * 30}%`,
-                top: `${30 + i * 20}%`,
+                left: `${particle.left}%`,
+                top: `${particle.top}%`,
                 width: '12px',
                 height: '12px',
                 background: `radial-gradient(circle, rgba(251, 191, 36, 0.5) 0%, rgba(245, 158, 11, 0.25) 40%, transparent 70%)`,
@@ -467,25 +544,25 @@ export default function VariantD({ variant }: VariantProps) {
                 scale: [1, 1.15, 1],
               }}
               transition={{
-                duration: 6 + i * 2,
+                duration: particle.duration,
                 repeat: Infinity,
-                delay: i * 1.5,
+                delay: particle.delay,
                 ease: 'easeInOut',
               }}
             />
           ))}
         </div>
 
-        {/* Artistic Geometric Pattern Animations - Simplified on mobile */}
+        {/* Artistic Geometric Pattern Animations - Memoized geometry */}
         <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
-          {/* Rotating hexagons - Desktop only */}
-          {[...Array(4)].map((_, i) => (
+          {/* Rotating hexagons - Desktop only - Memoized */}
+          {geometry.hexagons.map((hex) => (
             <motion.div
-              key={`hex-${i}`}
+              key={`hex-${hex.id}`}
               className="absolute hidden md:block"
               style={{
-                left: `${15 + i * 20}%`,
-                top: `${20 + (i % 3) * 25}%`,
+                left: `${hex.left}%`,
+                top: `${hex.top}%`,
                 width: '60px',
                 height: '60px',
               }}
@@ -495,12 +572,12 @@ export default function VariantD({ variant }: VariantProps) {
               }}
               transition={{
                 rotate: {
-                  duration: 20 + i * 3,
+                  duration: hex.rotateDuration,
                   repeat: Infinity,
                   ease: 'linear',
                 },
                 opacity: {
-                  duration: 6 + i,
+                  duration: hex.opacityDuration,
                   repeat: Infinity,
                   ease: 'easeInOut',
                 },
@@ -517,14 +594,14 @@ export default function VariantD({ variant }: VariantProps) {
             </motion.div>
           ))}
 
-          {/* Floating circles - Reduced on mobile */}
-          {[...Array(2)].map((_, i) => (
+          {/* Floating circles - Desktop - Memoized */}
+          {geometry.circles.map((circle) => (
             <motion.div
-              key={`circle-${i}`}
+              key={`circle-${circle.id}`}
               className="absolute rounded-full border-2 hidden md:block"
               style={{
-                right: `${15 + i * 30}%`,
-                top: `${20 + i * 30}%`,
+                right: `${circle.right}%`,
+                top: `${circle.top}%`,
                 width: '80px',
                 height: '80px',
                 borderColor: 'rgba(245, 158, 11, 0.2)',
@@ -535,22 +612,22 @@ export default function VariantD({ variant }: VariantProps) {
                 rotate: [0, 180, 0],
               }}
               transition={{
-                duration: 8 + i * 2,
+                duration: circle.duration,
                 repeat: Infinity,
                 ease: 'easeInOut',
-                delay: i * 1.5,
+                delay: circle.delay,
               }}
             />
           ))}
 
-          {/* Mobile: Simplified circles */}
-          {[...Array(2)].map((_, i) => (
+          {/* Mobile circles - Memoized */}
+          {geometry.mobileCircles.map((circle) => (
             <motion.div
-              key={`circle-mobile-${i}`}
+              key={`circle-mobile-${circle.id}`}
               className="absolute rounded-full border md:hidden"
               style={{
-                right: `${20 + i * 50}%`,
-                top: `${25 + i * 40}%`,
+                right: `${circle.right}%`,
+                top: `${circle.top}%`,
                 width: '50px',
                 height: '50px',
                 borderColor: 'rgba(245, 158, 11, 0.15)',
@@ -560,21 +637,21 @@ export default function VariantD({ variant }: VariantProps) {
                 opacity: [0.08, 0.18, 0.08],
               }}
               transition={{
-                duration: 8 + i * 2,
+                duration: circle.duration,
                 repeat: Infinity,
                 ease: 'easeInOut',
-                delay: i * 2,
+                delay: circle.delay,
               }}
             />
           ))}
 
-          {/* Wave lines - Reduced on mobile */}
-          {[...Array(2)].map((_, i) => (
+          {/* Wave lines - Memoized */}
+          {geometry.waves.map((wave) => (
             <motion.div
-              key={`wave-${i}`}
+              key={`wave-${wave.id}`}
               className="absolute left-0 right-0"
               style={{
-                top: `${35 + i * 35}%`,
+                top: `${wave.top}%`,
                 height: '1px',
                 background: 'linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.2), transparent)',
               }}
@@ -583,10 +660,10 @@ export default function VariantD({ variant }: VariantProps) {
                 opacity: [0, 0.3, 0],
               }}
               transition={{
-                duration: 10 + i * 2,
+                duration: wave.duration,
                 repeat: Infinity,
                 ease: 'linear',
-                delay: i * 4,
+                delay: wave.delay,
               }}
             />
           ))}
@@ -612,14 +689,14 @@ export default function VariantD({ variant }: VariantProps) {
           />
         </div>
 
-        {/* Subtle Light Rays - Reduced for smooth performance */}
+        {/* Subtle Light Rays - Memoized positions */}
         <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
-          {[...Array(4)].map((_, i) => (
+          {geometry.lightRays.map((ray) => (
             <motion.div
-              key={i}
+              key={`ray-${ray.id}`}
               className="light-ray absolute h-full"
               style={{
-                left: `${25 + i * 18}%`,
+                left: `${ray.left}%`,
                 width: '1px',
                 background: 'linear-gradient(to bottom, transparent 0%, rgba(251, 191, 36, 0.4) 50%, transparent 100%)',
                 transformOrigin: 'top',
@@ -629,9 +706,9 @@ export default function VariantD({ variant }: VariantProps) {
                 opacity: [0.03, 0.1, 0.03],
               }}
               transition={{
-                duration: 4 + i * 1.5,
+                duration: ray.duration,
                 repeat: Infinity,
-                delay: i * 0.8,
+                delay: ray.delay,
                 ease: 'easeInOut',
               }}
             />
@@ -835,7 +912,8 @@ export default function VariantD({ variant }: VariantProps) {
 }
 
 // Magnetic CTA Component - Mobile optimized (no magnetic effect on mobile)
-function MagneticCTA({ onSubmit, email, setEmail }: any) {
+// Performance: Memoized with React.memo to prevent unnecessary re-renders
+const MagneticCTA = memo(function MagneticCTA({ onSubmit, email, setEmail }: any) {
   const buttonRef = useRef<HTMLDivElement>(null);
   const { x, y } = useMagneticEffect(buttonRef, 0.4);
   const [ripples, setRipples] = useState<Array<{ x: number; y: number; id: number }>>([]);
@@ -908,10 +986,11 @@ function MagneticCTA({ onSubmit, email, setEmail }: any) {
       </p>
     </motion.form>
   );
-}
+});
 
 // Animated Stats Component with Count-Up - Mobile optimized
-function AnimatedStats() {
+// Performance: Memoized to prevent re-renders
+const AnimatedStats = memo(function AnimatedStats() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
 
@@ -939,10 +1018,11 @@ function AnimatedStats() {
       ))}
     </div>
   );
-}
+});
 
 // Count Up Animation Component
-function CountUp({ end, suffix }: { end: number; suffix: string }) {
+// Performance: Memoized to prevent re-renders when stats don't change
+const CountUp = memo(function CountUp({ end, suffix }: { end: number; suffix: string }) {
   const [count, setCount] = useState(0);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
@@ -975,10 +1055,11 @@ function CountUp({ end, suffix }: { end: number; suffix: string }) {
       {suffix}
     </span>
   );
-}
+});
 
 // Features Section Component with Image Backgrounds
-function FeaturesSection() {
+// Performance: Memoized to prevent unnecessary re-renders
+const FeaturesSection = memo(function FeaturesSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -1117,10 +1198,11 @@ function FeaturesSection() {
       </div>
     </section>
   );
-}
+});
 
 // Feature Card with 3D Tilt and Hover Animation
-function FeatureCard({ feature, index }: { feature: any; index: number }) {
+// Performance: Memoized with React.memo
+const FeatureCard = memo(function FeatureCard({ feature, index }: { feature: any; index: number }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
@@ -1201,10 +1283,11 @@ function FeatureCard({ feature, index }: { feature: any; index: number }) {
       </div>
     </motion.div>
   );
-}
+});
 
 // Impact Section with Full-Screen Background Image
-function ImpactSection() {
+// Performance: Memoized
+const ImpactSection = memo(function ImpactSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -1360,10 +1443,11 @@ function ImpactSection() {
       </div>
     </section>
   );
-}
+});
 
 // Testimonials Section with Subtle Background
-function TestimonialsSection() {
+// Performance: Memoized
+const TestimonialsSection = memo(function TestimonialsSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -1485,10 +1569,11 @@ function TestimonialsSection() {
       </div>
     </section>
   );
-}
+});
 
 // Testimonial Card with Interactive Hover
-function TestimonialCard({ testimonial, index }: { testimonial: any; index: number }) {
+// Performance: Memoized
+const TestimonialCard = memo(function TestimonialCard({ testimonial, index }: { testimonial: any; index: number }) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -1553,10 +1638,11 @@ function TestimonialCard({ testimonial, index }: { testimonial: any; index: numb
       </div>
     </motion.div>
   );
-}
+});
 
 // Final CTA Section with Dramatic Background
-function FinalCTASection({ onSubmit, email, setEmail }: any) {
+// Performance: Memoized
+const FinalCTASection = memo(function FinalCTASection({ onSubmit, email, setEmail }: any) {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -1733,10 +1819,11 @@ function FinalCTASection({ onSubmit, email, setEmail }: any) {
       </div>
     </section>
   );
-}
+});
 
 // Final Magnetic CTA with Enhanced Interactivity
-function FinalMagneticCTA({ onSubmit, email, setEmail }: any) {
+// Performance: Memoized
+const FinalMagneticCTA = memo(function FinalMagneticCTA({ onSubmit, email, setEmail }: any) {
   const buttonRef = useRef<HTMLDivElement>(null);
   const { x, y } = useMagneticEffect(buttonRef, 0.5);
   const [ripples, setRipples] = useState<Array<{ x: number; y: number; id: number }>>([]);
@@ -1816,10 +1903,11 @@ function FinalMagneticCTA({ onSubmit, email, setEmail }: any) {
       </motion.p>
     </motion.form>
   );
-}
+});
 
 // 3D Floating Feature Card Component
-function FloatingCard3D({ feature, index, mouseX, mouseY }: any) {
+// Performance: Memoized
+const FloatingCard3D = memo(function FloatingCard3D({ feature, index, mouseX, mouseY }: any) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -1988,4 +2076,4 @@ function FloatingCard3D({ feature, index, mouseX, mouseY }: any) {
       </motion.div>
     </motion.div>
   );
-}
+});
