@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -11,6 +12,17 @@ import { Button, Input } from '@/components/ui';
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
+
+// High-quality Unsplash images for Vietnamese ecosystem theme
+const IMAGES = {
+  hero: 'https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=3432&auto=format&fit=crop', // Vietnamese forest
+  heroOverlay: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=3413&auto=format&fit=crop', // Green leaves
+  feature1: 'https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?q=80&w=3540&auto=format&fit=crop', // Sustainable living
+  feature2: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=3540&auto=format&fit=crop', // Green tech
+  impact: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=3540&auto=format&fit=crop', // Community planting
+  testimonial: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=3413&auto=format&fit=crop', // Nature background
+  cta: 'https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=3432&auto=format&fit=crop', // Forest sunset
+};
 
 interface VariantProps {
   variant: Variant;
@@ -117,14 +129,61 @@ export default function VariantD({ variant }: VariantProps) {
     <div className="min-h-screen bg-gradient-to-b from-primary-50 via-white to-primary-50">
       {/* Hero Section - Animated with GSAP */}
       <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Animated Background Elements */}
+        {/* Parallax Background Image Layers */}
         <motion.div
           style={{ y, opacity }}
           className="absolute inset-0 z-0"
         >
-          <div className="absolute top-20 left-10 w-64 h-64 bg-primary-200 rounded-full blur-3xl opacity-30 float-1" />
-          <div className="absolute top-40 right-20 w-96 h-96 bg-primary-300 rounded-full blur-3xl opacity-20 float-2" />
-          <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-primary-100 rounded-full blur-3xl opacity-25 float-3" />
+          {/* Main background image */}
+          <div className="absolute inset-0">
+            <Image
+              src={IMAGES.hero}
+              alt="Vietnamese Forest Background"
+              fill
+              priority
+              className="object-cover float-1"
+              style={{ objectPosition: 'center 40%' }}
+            />
+            {/* Gradient overlays for text readability and depth */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-primary-50" />
+            <div className="absolute inset-0 bg-gradient-to-r from-primary-600/20 to-transparent" />
+          </div>
+
+          {/* Floating overlay image with parallax effect */}
+          <motion.div
+            className="absolute top-0 right-0 w-1/2 h-full opacity-40 float-2"
+            style={{ y: useTransform(scrollYProgress, [0, 1], ['0%', '30%']) }}
+          >
+            <Image
+              src={IMAGES.heroOverlay}
+              alt="Green Leaves Overlay"
+              fill
+              className="object-cover mix-blend-overlay"
+            />
+          </motion.div>
+
+          {/* Animated light particles */}
+          <div className="absolute inset-0 float-3">
+            {[...Array(20)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-1 h-1 bg-primary-300 rounded-full"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                }}
+                animate={{
+                  y: [-20, 20],
+                  opacity: [0.2, 0.6, 0.2],
+                }}
+                transition={{
+                  duration: 3 + Math.random() * 2,
+                  repeat: Infinity,
+                  delay: Math.random() * 2,
+                }}
+              />
+            ))}
+          </div>
         </motion.div>
 
         <div className="container mx-auto px-4 relative z-10">
@@ -295,8 +354,39 @@ function CountUp({ end, suffix }: { end: number; suffix: string }) {
   );
 }
 
-// Features Section Component
+// Features Section Component with Image Backgrounds
 function FeaturesSection() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Animate background images on scroll
+      gsap.to('.feature-bg-1', {
+        scrollTrigger: {
+          trigger: '.feature-bg-1',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1,
+        },
+        y: 100,
+        scale: 1.1,
+      });
+
+      gsap.to('.feature-bg-2', {
+        scrollTrigger: {
+          trigger: '.feature-bg-2',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1,
+        },
+        y: -50,
+        scale: 1.05,
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   const features = [
     {
       icon: '🌱',
@@ -331,8 +421,30 @@ function FeaturesSection() {
   ];
 
   return (
-    <section className="py-20 px-4">
-      <div className="container mx-auto max-w-7xl">
+    <section ref={sectionRef} className="py-20 px-4 relative overflow-hidden">
+      {/* Background Image Layers with Parallax */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute left-0 top-0 w-1/2 h-3/4 opacity-10 feature-bg-1">
+          <Image
+            src={IMAGES.feature1}
+            alt="Sustainable Living"
+            fill
+            className="object-cover"
+          />
+        </div>
+        <div className="absolute right-0 bottom-0 w-1/2 h-3/4 opacity-10 feature-bg-2">
+          <Image
+            src={IMAGES.feature2}
+            alt="Green Technology"
+            fill
+            className="object-cover"
+          />
+        </div>
+        {/* Gradient overlays */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/90 to-transparent" />
+      </div>
+
+      <div className="container mx-auto max-w-7xl relative">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -386,11 +498,73 @@ function FeatureCard({ feature, index }: { feature: any; index: number }) {
   );
 }
 
-// Impact Section
+// Impact Section with Full-Screen Background Image
 function ImpactSection() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Zoom effect on scroll
+      gsap.to('.impact-bg', {
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1,
+        },
+        scale: 1.2,
+      });
+
+      // Reveal effect for stats
+      gsap.from('.impact-stat', {
+        scrollTrigger: {
+          trigger: '.impact-stat',
+          start: 'top 80%',
+        },
+        y: 50,
+        opacity: 0,
+        stagger: 0.2,
+        duration: 1,
+        ease: 'power3.out',
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="py-20 px-4 bg-gradient-to-r from-primary-600 to-primary-700 text-white">
-      <div className="container mx-auto max-w-6xl text-center">
+    <section ref={sectionRef} className="py-20 px-4 relative overflow-hidden min-h-[600px] flex items-center">
+      {/* Background Image with Overlay */}
+      <div className="absolute inset-0 -z-10">
+        <div className="impact-bg absolute inset-0">
+          <Image
+            src={IMAGES.impact}
+            alt="Community Impact"
+            fill
+            className="object-cover"
+          />
+        </div>
+        {/* Multi-layer gradient overlays for depth */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-600/95 via-primary-700/90 to-primary-800/95" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/20" />
+        {/* Animated light rays */}
+        <motion.div
+          className="absolute inset-0 opacity-20"
+          style={{
+            background: 'linear-gradient(45deg, transparent 30%, white 50%, transparent 70%)',
+          }}
+          animate={{
+            x: ['-100%', '200%'],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: 'linear',
+          }}
+        />
+      </div>
+
+      <div className="container mx-auto max-w-6xl text-center text-white relative z-10">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -418,7 +592,7 @@ function ImpactSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="text-center"
+                className="impact-stat text-center backdrop-blur-sm bg-white/10 rounded-2xl p-6"
               >
                 <div className="text-6xl mb-4">{item.icon}</div>
                 <div className="text-4xl font-bold mb-2">{item.number}</div>
@@ -432,8 +606,41 @@ function ImpactSection() {
   );
 }
 
-// Testimonials Section
+// Testimonials Section with Subtle Background
 function TestimonialsSection() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Subtle parallax for background
+      gsap.to('.testimonial-bg', {
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1,
+        },
+        y: 50,
+        opacity: 0.15,
+      });
+
+      // Card reveal animation
+      gsap.from('.testimonial-card', {
+        scrollTrigger: {
+          trigger: '.testimonial-card',
+          start: 'top 85%',
+        },
+        y: 60,
+        opacity: 0,
+        stagger: 0.15,
+        duration: 0.8,
+        ease: 'power3.out',
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   const testimonials = [
     {
       name: 'Nguyễn Minh Anh',
@@ -456,8 +663,21 @@ function TestimonialsSection() {
   ];
 
   return (
-    <section className="py-20 px-4 bg-gray-50">
-      <div className="container mx-auto max-w-7xl">
+    <section ref={sectionRef} className="py-20 px-4 relative overflow-hidden">
+      {/* Subtle Background Image */}
+      <div className="absolute inset-0 -z-10">
+        <div className="testimonial-bg absolute inset-0 opacity-5">
+          <Image
+            src={IMAGES.testimonial}
+            alt="Nature Background"
+            fill
+            className="object-cover"
+          />
+        </div>
+        <div className="absolute inset-0 bg-gray-50/80 backdrop-blur-sm" />
+      </div>
+
+      <div className="container mx-auto max-w-7xl relative">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -480,8 +700,8 @@ function TestimonialsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.2 }}
-              whileHover={{ y: -8 }}
-              className="bg-white p-8 rounded-3xl shadow-lg"
+              whileHover={{ y: -8, scale: 1.02 }}
+              className="testimonial-card bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all"
             >
               <div className="flex items-center mb-4">
                 <div className="text-5xl mr-4">{testimonial.avatar}</div>
@@ -506,48 +726,158 @@ function TestimonialsSection() {
   );
 }
 
-// Final CTA Section
+// Final CTA Section with Dramatic Background
 function FinalCTASection({ onSubmit, email, setEmail }: any) {
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Zoom and fade effect for background
+      gsap.to('.cta-bg', {
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1,
+        },
+        scale: 1.15,
+      });
+
+      // Pulse animation for CTA box
+      gsap.from('.cta-box', {
+        scrollTrigger: {
+          trigger: '.cta-box',
+          start: 'top 80%',
+        },
+        scale: 0.9,
+        opacity: 0,
+        duration: 1,
+        ease: 'power3.out',
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="py-24 px-4">
+    <section ref={sectionRef} className="py-24 px-4 relative overflow-hidden">
+      {/* Dramatic Background Image */}
+      <div className="absolute inset-0 -z-10">
+        <div className="cta-bg absolute inset-0">
+          <Image
+            src={IMAGES.cta}
+            alt="Forest Sunset"
+            fill
+            className="object-cover"
+          />
+        </div>
+        {/* Multi-layer overlays for depth and drama */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-600/90 via-primary-700/85 to-primary-900/90" />
+        <div className="absolute inset-0 bg-gradient-radial from-transparent via-primary-600/30 to-primary-900/70" />
+
+        {/* Animated particles */}
+        <div className="absolute inset-0">
+          {[...Array(30)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-2 h-2 bg-white rounded-full"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+              }}
+              animate={{
+                y: [0, -30, 0],
+                opacity: [0, 0.7, 0],
+                scale: [0, 1, 0],
+              }}
+              transition={{
+                duration: 4 + Math.random() * 3,
+                repeat: Infinity,
+                delay: Math.random() * 3,
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Animated gradient sweep */}
+        <motion.div
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)',
+          }}
+          animate={{
+            x: ['-100%', '200%'],
+          }}
+          transition={{
+            duration: 5,
+            repeat: Infinity,
+            ease: 'linear',
+          }}
+        />
+      </div>
+
       <div className="container mx-auto max-w-4xl">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className="bg-gradient-to-br from-primary-600 to-primary-700 rounded-[32px] p-12 text-white text-center shadow-2xl"
+          className="cta-box relative rounded-[32px] p-12 text-white text-center overflow-hidden"
         >
-          <h2 className="text-5xl font-bold mb-6">
-            Sẵn Sàng Tạo Thay Đổi?
-          </h2>
-          <p className="text-xl mb-10 opacity-90 max-w-2xl mx-auto">
-            Tham gia cùng 50,000+ người đang xây dựng tương lai bền vững.
-            Bắt đầu hành trình của bạn ngay hôm nay!
-          </p>
+          {/* Glass morphism effect */}
+          <div className="absolute inset-0 bg-white/10 backdrop-blur-xl rounded-[32px] border border-white/20" />
 
-          <form onSubmit={onSubmit} className="max-w-2xl mx-auto">
-            <div className="flex flex-col sm:flex-row gap-3 bg-white/10 backdrop-blur-md p-2 rounded-2xl">
-              <Input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Nhập email của bạn"
-                required
-                inputSize="lg"
-                className="flex-1 border-0 bg-white text-gray-900"
-              />
-              <Button
-                type="submit"
-                size="lg"
-                className="px-8 bg-white text-primary-600 hover:bg-gray-100 shadow-lg whitespace-nowrap"
-              >
-                Bắt Đầu Miễn Phí →
-              </Button>
-            </div>
-            <p className="text-sm mt-4 opacity-75">
-              🎉 Đăng ký miễn phí • ⚡ Kích hoạt ngay lập tức • 🔒 Bảo mật tuyệt đối
-            </p>
-          </form>
+          <div className="relative z-10">
+            <motion.h2
+              className="text-5xl font-bold mb-6"
+              initial={{ y: 20, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+            >
+              Sẵn Sàng Tạo Thay Đổi?
+            </motion.h2>
+            <motion.p
+              className="text-xl mb-10 opacity-90 max-w-2xl mx-auto"
+              initial={{ y: 20, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+            >
+              Tham gia cùng 50,000+ người đang xây dựng tương lai bền vững.
+              Bắt đầu hành trình của bạn ngay hôm nay!
+            </motion.p>
+
+            <motion.form
+              onSubmit={onSubmit}
+              className="max-w-2xl mx-auto"
+              initial={{ y: 20, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4 }}
+            >
+              <div className="flex flex-col sm:flex-row gap-3 bg-white/10 backdrop-blur-md p-2 rounded-2xl border border-white/20">
+                <Input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Nhập email của bạn"
+                  required
+                  inputSize="lg"
+                  className="flex-1 border-0 bg-white text-gray-900"
+                />
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="px-8 bg-white text-primary-600 hover:bg-gray-100 shadow-lg whitespace-nowrap hover:scale-105 transition-transform"
+                >
+                  Bắt Đầu Miễn Phí →
+                </Button>
+              </div>
+              <p className="text-sm mt-4 opacity-75">
+                🎉 Đăng ký miễn phí • ⚡ Kích hoạt ngay lập tức • 🔒 Bảo mật tuyệt đối
+              </p>
+            </motion.form>
+          </div>
         </motion.div>
       </div>
     </section>
