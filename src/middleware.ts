@@ -24,6 +24,7 @@ const SUBDOMAIN_MAPPING: Record<string, string> = {
  * - variant-b.ecomate.vn → /landing/B
  * - variant-c.ecomate.vn → /landing/C
  * - variant-d.ecomate.vn → /landing/D
+ * - variant-d.app-name.vercel.app → /landing/D (Vercel preview URLs)
  * - ecomate.vn → / (main site)
  *
  * Local Testing:
@@ -37,42 +38,38 @@ export function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
   const hostname = request.headers.get('host') || '';
 
-  // Extract subdomain
-  // For production: variant-a.ecomate.vn
-  // For local: variant-a.localhost
+  // Skip if already on landing page to avoid infinite loops
+  if (url.pathname.startsWith('/landing/')) {
+    return NextResponse.next();
+  }
+
+  // Extract subdomain from hostname
   const hostParts = hostname.split('.');
 
-  // Handle localhost (for development)
-  if (hostname.includes('localhost')) {
-    const subdomain = hostname.split('.')[0];
+  // Debug logging (visible in Vercel logs)
+  console.log('[Middleware] hostname:', hostname);
+  console.log('[Middleware] pathname:', url.pathname);
+  console.log('[Middleware] hostParts:', hostParts);
 
-    // Map subdomain to variant
-    const variant = SUBDOMAIN_MAPPING[subdomain];
+  // Extract the subdomain (first part of hostname)
+  const subdomain = hostParts[0];
+  console.log('[Middleware] subdomain:', subdomain);
 
-    if (variant) {
-      // Rewrite to /landing/[variant]
-      // But keep the original URL in browser
-      url.pathname = `/landing/${variant}`;
-      return NextResponse.rewrite(url);
-    }
+  // Map subdomain to variant
+  const variant = SUBDOMAIN_MAPPING[subdomain];
+  console.log('[Middleware] mapped variant:', variant);
+
+  if (variant) {
+    // Rewrite to /landing/[variant]
+    // This keeps the original URL in the browser
+    const newPath = `/landing/${variant}`;
+    console.log('[Middleware] Rewriting to:', newPath);
+    url.pathname = newPath;
+    return NextResponse.rewrite(url);
   }
 
-  // Handle production domains
-  if (hostParts.length >= 3) {
-    // variant-a.ecomate.vn -> ['variant-a', 'ecomate', 'vn']
-    const subdomain = hostParts[0];
-
-    // Map subdomain to variant
-    const variant = SUBDOMAIN_MAPPING[subdomain];
-
-    if (variant) {
-      // Rewrite to /landing/[variant]
-      url.pathname = `/landing/${variant}`;
-      return NextResponse.rewrite(url);
-    }
-  }
-
-  // If no subdomain match, continue normally
+  // No subdomain match - continue normally
+  console.log('[Middleware] No variant match, continuing normally');
   return NextResponse.next();
 }
 
